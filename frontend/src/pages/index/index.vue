@@ -84,7 +84,7 @@
           <span class="action-text">社区</span>
         </div>
         <div class="action-item" @click="goToAchievements">
-          <div class="action-icon">🎖�?/div>
+          <div class="action-icon">🎖️</div>
           <span class="action-text">成就</span>
         </div>
         <div class="action-item" @click="goToFriends">
@@ -107,7 +107,7 @@
           <span class="gacha-desc">花费 100 金币抽取稀有宠物！</span>
         </div>
       </div>
-      <span class="gacha-arrow">�?/span>
+      <span class="gacha-arrow">›</span>
     </div>
 
     <!-- 我的宠物预览 -->
@@ -131,13 +131,13 @@
           </div>
           <div class="pet-status">
             <div class="status-item">
-              <span class="status-label">�?/span>
+              <span class="status-label">饱</span>
               <div class="status-bar">
                 <div class="status-fill hunger" :style="{ width: pet.hunger + '%' }"></div>
               </div>
             </div>
             <div class="status-item">
-              <span class="status-label">�?/span>
+              <span class="status-label">乐</span>
               <div class="status-bar">
                 <div class="status-fill happiness" :style="{ width: pet.happiness + '%' }"></div>
               </div>
@@ -174,7 +174,7 @@
           >
             <span class="task-emoji">{{ task.emoji }}</span>
             <span class="task-name">{{ task.name }}</span>
-            <span class="task-status">{{ task.completed ? '�? : `${task.current}/${task.target}` }}</span>
+            <span class="task-status">{{ task.completed ? '✓' : `${task.current}/${task.target}` }}</span>
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ import { petAPI, tasksAPI, userAPI } from '@/services/api';
 const router = useRouter();
 const authStore = useAuthStore();
 
-const userNickname = ref('铲屎�?);
+const userNickname = ref('主人');
 const userLevel = ref(1);
 const userAvatar = ref('👤');
 const coins = ref(0);
@@ -202,17 +202,17 @@ const todaySigned = ref(false);
 
 const timeOfDay = computed(() => {
   const hour = new Date().getHours();
-  if (hour < 12) return '早上�?;
-  if (hour < 18) return '下午�?;
-  return '晚上�?;
+  if (hour < 12) return '早上好';
+  if (hour < 18) return '下午好';
+  return '晚上好';
 });
 
-const userTitles = ['萌新铲屎�?, '初级达人', '中级达人', '高级达人', '资深达人', '宠物大师', '宠物之王'];
+const userTitles = ['萌新铲屎官', '初级达人', '中级达人', '高级达人', '资深达人', '宠物大师', '宠物之王'];
 const userTitleText = computed(() => userTitles[Math.min(Math.floor(userLevel.value / 5), userTitles.length - 1)]);
 
 const banners = ref([
-  { id: 1, image: 'https://place.dog/750/320', title: '🐕 新宠物来�?, desc: '领养一只可爱的小狗�?, link: '/pets' },
-  { id: 2, image: 'https://place.dog/750/321', title: '🎁 登录送好�?, desc: '连续签到获得超值奖�?, link: '/tasks' },
+  { id: 1, image: 'https://place.dog/750/320', title: '🐕 新宠物来袭', desc: '领养一只可爱的小狗狗', link: '/pets' },
+  { id: 2, image: 'https://place.dog/750/321', title: '🎁 登录送好礼', desc: '连续签到获得超值奖励', link: '/tasks' },
   { id: 3, image: 'https://place.dog/750/322', title: '🛒 商店特惠', desc: '限时折扣等你来抢', link: '/shop' },
   { id: 4, image: 'https://place.dog/750/323', title: '🏆 排行榜争夺战', desc: '谁是最后的赢家', link: '/rankings' }
 ]);
@@ -230,7 +230,7 @@ const handleSign = async () => {
     const res = await userAPI.signIn(userId);
     if (res.alreadySigned) {
       todaySigned.value = true;
-      uni.showToast({ title: '今日已签�?, icon: 'none' });
+      uni.showToast({ title: '今日已签到', icon: 'none' });
       return;
     }
     todaySigned.value = true;
@@ -261,7 +261,7 @@ const goToPetDetail = (id: number) => router.push(`/pets/detail?id=${id}`);
 
 const openGacha = () => {
   if (coins.value < 100) {
-    uni.showToast({ title: '金币不足�?, icon: 'error' });
+    uni.showToast({ title: '金币不足', icon: 'error' });
     return;
   }
   coins.value -= 100;
@@ -283,14 +283,14 @@ onMounted(() => {
 
     try {
       const info = await userAPI.getById(userId);
-      userNickname.value = info.nickname || '铲屎�?;
+      userNickname.value = info.nickname || '主人';
       userLevel.value = info.level || 1;
       userAvatar.value = info.avatar || '👤';
       coins.value = info.coins || 0;
       gems.value = info.diamonds || 0;
     } catch {
       if (authStore.userInfo) {
-        userNickname.value = authStore.userInfo.nickname || '铲屎�?;
+        userNickname.value = authStore.userInfo.nickname || '主人';
         userLevel.value = authStore.userInfo.level || 1;
         userAvatar.value = authStore.userInfo.avatar || '👤';
         coins.value = authStore.userInfo.coins || 0;
