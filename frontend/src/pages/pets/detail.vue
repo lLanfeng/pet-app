@@ -265,12 +265,13 @@ const remove = () => {
 .stat-icon {
   font-size: 16px;
   width: 28px;
+  text-align: center;
 }
 
 .stat-name {
   font-size: 13px;
   color: #475569;
-  width: 36px;
+  width: 40px;
 }
 
 .stat-bar {
@@ -290,7 +291,7 @@ const remove = () => {
 .stat-num {
   font-size: 12px;
   color: #64748b;
-  width: 36px;
+  width: 40px;
   text-align: right;
 }
 
