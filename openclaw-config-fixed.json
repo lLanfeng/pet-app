@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.7",
+    "lastTouchedAt": "2026-03-09T12:08:15.562Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-09T12:03:21.364Z",
+    "lastRunVersion": "2026.3.7",
+    "lastRunCommand": "configure",
+    "lastRunMode": "local"
+  },
+  "auth": {
+    "profiles": {
+      "minimax-cn:default": {
+        "provider": "minimax-cn",
+        "mode": "api_key"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "openrouter": {
+        "baseUrl": "https://openrouter.ai/api",
+        "apiKey": "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",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "deepseek/deepseek-r1",
+            "name": "DeepSeek R1",
+            "cost": {
+              "input": 0,
+              "output": 0
+            }
+          },
+          {
+            "id": "anthropic/claude-3-haiku",
+            "name": "Claude 3 Haiku",
+            "cost": {
+              "input": 0.2,
+              "output": 0.2
+            }
+          }
+        ]
+      },
+      "minimax-cn": {
+        "baseUrl": "https://api.minimaxi.com/anthropic",
+        "api": "anthropic-messages",
+        "authHeader": true,
+        "models": [
+          {
+            "id": "MiniMax-M2.5",
+            "name": "MiniMax M2.5",
+            "reasoning": true,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0.3,
+              "output": 1.2,
+              "cacheRead": 0.03,
+              "cacheWrite": 0.12
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "minimax-cn/MiniMax-M2.5",
+        "fallbacks": [
+          "openrouter/deepseek/deepseek-r1"
+        ]
+      },
+      "models": {
+        "openrouter/deepseek/deepseek-r1": {
+          "alias": "DeepSeek (免费)"
+        },
+        "minimax-cn/MiniMax-M2.5": {
+          "alias": "Minimax"
+        }
+      },
+      "workspace": "C:\\Users\\PC\\.openclaw\\workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "model": "minimax-cn/MiniMax-M2.5"
+      }
+    ]
+  },
+  "tools": {
+    "profile": "full"
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "session": {
+    "dmScope": "per-channel-peer"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "appId": "cli_a9214b92ac38dbcd",
+      "appSecret": "waLMVb4PuL3fyIsyHUri0bCiGdNFPLPO"
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "dc1bb799f3f055db8c943d06571853fad69d1d3e43e018e6"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "denyCommands": [
+        "camera.snap",
+        "camera.clip",
+        "screen.record",
+        "contacts.add",
+        "calendar.add",
+        "reminders.add",
+        "sms.send"
+      ]
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      },
+      "iflow-cli": {
+        "enabled": true
+      }
+    },
+    "installs": {
+      "feishu": {
+        "source": "npm",
+        "spec": "@openclaw/feishu",
+        "installPath": "C:\\Users\\PC\\.openclaw\\extensions\\feishu",
+        "version": "2026.3.7",
+        "resolvedName": "@openclaw/feishu",
+        "resolvedVersion": "2026.3.7",
+        "resolvedSpec": "@openclaw/feishu@2026.3.7",
+        "integrity": "sha512-CHPcL+WHYKYR2HJKRYsRtlXx/wbQRy5axltjjH9qXkR8ghxygDmOHZREjxyFEbjFJ3wnIuvgjLE7JYTg3nPpDA==",
+        "shasum": "c4b31dbe2ff0bc7034334873482ad18ac60a0767",
+        "resolvedAt": "2026-03-08T12:26:55.700Z",
+        "installedAt": "2026-03-08T12:26:58.702Z"
+      },
+      "iflow-cli": {
+        "source": "path",
+        "sourcePath": "C:\\Users\\PC\\Desktop\\工作开发\\小程序\\openclaw-iflow-plugin",
+        "installPath": "C:\\Users\\PC\\.openclaw\\extensions\\openclaw-iflow-plugin",
+        "version": "1.0.0",
+        "installedAt": "2026-03-09T11:39:26.990Z"
+      }
+    }
+  }
+}

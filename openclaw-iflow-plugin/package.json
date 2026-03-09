@@ -1,0 +1,23 @@
+{
+  "name": "openclaw-iflow-plugin",
+  "version": "1.0.0",
+  "description": "iFlow CLI integration plugin for OpenClaw",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "keywords": ["openclaw", "iflow", "ai", "cli", "code-assistant"],
+  "author": "OpenClaw Community",
+  "license": "MIT",
+  "openclaw": {
+    "extensions": ["./index.ts"]
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

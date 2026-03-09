@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build
+dist/
+build/
+.nuxt/
+
+# Runtime
+*.log
+.cache/
+
+# Playwright
+test-results/
+playwright-report/
+
+# Database
+*.db
+petapp.db
+
+# Temp
+.temp/
+tmp/

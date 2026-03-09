@@ -1,0 +1,31 @@
+{
+  "id": "iflow-cli",
+  "name": "iFlow CLI Integration",
+  "version": "1.0.0",
+  "description": "Integrate iFlow CLI for code development and repository analysis",
+  "author": "OpenClaw Community",
+  "license": "MIT",
+  "main": "index.ts",
+  "skills": ["iflow"],
+  "tools": ["iflow"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "iflowPath": {
+        "type": "string",
+        "description": "iFlow CLI 可执行文件路径",
+        "default": "iflow"
+      },
+      "defaultModel": {
+        "type": "string",
+        "description": "默认 AI 模型",
+        "default": "auto"
+      }
+    }
+  },
+  "config": {
+    "iflowPath": "iflow",
+    "defaultModel": "auto"
+  }
+}

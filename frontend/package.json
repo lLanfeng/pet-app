@@ -1,0 +1,26 @@
+{
+  "name": "pet-app-frontend",
+  "version": "1.0.0",
+  "description": "Vue3 H5 frontend for 萌宠 application",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "pinia": "^2.0.32",
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/tsconfig": "^0.5.0",
+    "playwright": "^1.58.2",
+    "typescript": "^5.0.2",
+    "vite": "^5.0.0",
+    "vue-tsc": "^2.0.0"
+  }
+}
