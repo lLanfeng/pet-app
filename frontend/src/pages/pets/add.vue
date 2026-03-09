@@ -93,78 +93,76 @@ const onSubmit = async () => {
 
 <style scoped>
 .add-pet-container {
-  background-color: var(--bg-base);
+  background: #f8fafc;
   min-height: 100vh;
   padding: 20px;
-  padding-top: 30px;
 }
 
 .form-section {
-  background: white;
-  border-radius: 22px;
+  background: #fff;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  border: 1px solid #e2e8f0;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .label {
   display: block;
   font-size: 14px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 8px;
 }
 
 .input {
   width: 100%;
   padding: 12px;
-  border: 2px solid var(--stroke);
-  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 14px;
-  background-color: #fff;
+  background: #fff;
+  box-sizing: border-box;
 }
 
 .input:focus {
-  border-color: rgba(75, 209, 200, 0.6);
-  background-color: white;
+  outline: none;
+  border-color: #22c55e;
 }
 
 .type-selector {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .type-option {
-  padding: 10px 15px;
-  border: 2px solid var(--stroke);
-  border-radius: 16px;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   background: #fff;
-  color: #333;
+  color: #475569;
   font-size: 14px;
 }
 
 .type-option.active {
-  background: linear-gradient(135deg, var(--accent-mint), var(--accent-coral));
-  color: white;
-  border-color: transparent;
+  background: #22c55e;
+  color: #fff;
+  border-color: #22c55e;
 }
 
 .btn-submit {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-coral) 100%);
-  color: white;
+  background: #22c55e;
+  color: #fff;
   border: none;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 20px;
-  box-shadow: var(--shadow);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 12px;
 }
 
 .btn-submit:disabled {
@@ -172,13 +170,12 @@ const onSubmit = async () => {
 }
 
 .error-message {
-  color: #ff6b6b;
-  font-size: 14px;
-  margin-top: 20px;
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 16px;
   text-align: center;
-  background: white;
-  padding: 15px;
-  border-radius: 18px;
-  border: 2px solid var(--stroke);
+  background: #fef2f2;
+  padding: 12px;
+  border-radius: 8px;
 }
 </style>

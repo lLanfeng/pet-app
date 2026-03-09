@@ -38,8 +38,7 @@
           <text class="product-name">{{ product.name }}</text>
           <text class="product-desc">{{ product.description }}</text>
           <view class="product-price">
-            <text class="coin-icon-small">💰</text>
-            <text class="price-amount">{{ product.price }}</text>
+            <text class="price-amount">💰 {{ product.price }}</text>
           </view>
         </view>
         <view class="buy-button" @click.stop="buyProduct(product)">
@@ -49,35 +48,18 @@
     </scroll-view>
 
     <!-- 背包 -->
-    <scroll-view v-else class="inventory-list" scroll-y="true">
+    <scroll-view v-else class="products-list" scroll-y="true">
       <view class="inventory-header">
         <text class="inventory-title">我的背包</text>
-        <view class="pet-picker" v-if="pets.length">
-          <text class="picker-label">使用目标：</text>
-          <view class="pet-chips">
-            <view
-              v-for="pet in pets"
-              :key="pet.id"
-              class="pet-chip"
-              :class="{ active: selectedPetId === pet.id }"
-              @click="selectedPetId = pet.id"
-            >
-              <text class="chip-emoji">{{ pet.emoji }}</text>
-              <text class="chip-name">{{ pet.name }}</text>
-            </view>
-          </view>
-        </view>
       </view>
-
       <view v-if="inventory.length === 0" class="empty-inventory">
         <text class="empty-emoji">🎒</text>
-        <text class="empty-text">背包空空如也，去商店逛逛吧</text>
+        <text class="empty-text">背包空空如也</text>
       </view>
-
       <view
         v-for="item in inventory"
         :key="item.id"
-        class="product-card inventory-card"
+        class="product-card"
       >
         <view class="product-image">
           <text class="product-emoji">{{ item.emoji }}</text>
@@ -86,12 +68,8 @@
           <text class="product-name">{{ item.name }}</text>
           <text class="product-desc">{{ item.effect }}</text>
           <view class="product-price">
-            <text class="coin-icon-small">📦</text>
             <text class="price-amount">x{{ item.quantity }}</text>
           </view>
-        </view>
-        <view class="buy-button" @click.stop="useItem(item)" :class="{ disabled: !selectedPetId }">
-          <text class="buy-text">{{ selectedPetId ? '使用' : '请选择宠物' }}</text>
         </view>
       </view>
     </scroll-view>
@@ -110,8 +88,7 @@
           <text class="effect-desc">{{ selectedProduct?.effect }}</text>
         </view>
         <view class="detail-price">
-          <text class="coin-icon-small">💰</text>
-          <text class="price-amount">{{ selectedProduct?.price }}</text>
+          <text class="price-amount">💰 {{ selectedProduct?.price }}</text>
         </view>
         <view class="detail-buttons">
           <button class="cancel-btn" @click="hideDetail">取消</button>
@@ -144,17 +121,14 @@ const displayCategories = computed(() => {
   return [...categories.value, { id: 'inventory', name: '背包', icon: '🎒' }]
 })
 
-// 计算属性
 const filteredProducts = computed(() => {
   return products.value.filter(product => product.category === activeCategory.value)
 })
 
-// 方法
 const switchCategory = async (categoryId: string) => {
   activeCategory.value = categoryId
   if (categoryId === 'inventory') {
     await loadInventory()
-    await loadPets()
   } else {
     await loadProducts()
   }
@@ -181,27 +155,16 @@ const confirmBuy = async () => {
   try {
     const res = await shopAPI.buy(userId, product.id, 1)
     authStore.updateCoins(-(res.cost || product.price))
-    uni.showToast({
-      title: `购买成功！获得 ${product.name}`,
-      icon: 'success',
-      duration: 2000
-    })
+    uni.showToast({ title: `购买成功！`, icon: 'success' })
     hideDetail()
   } catch (err: any) {
-    uni.showToast({
-      title: err?.error || '金币不足',
-      icon: 'error',
-      duration: 2000
-    })
+    uni.showToast({ title: err?.error || '金币不足', icon: 'error' })
   }
 }
 
 const loadCategories = async () => {
   const data = await shopAPI.categories()
   categories.value = data || []
-  if (!categories.value.find(c => c.id === activeCategory.value)) {
-    activeCategory.value = categories.value[0]?.id || 'food'
-  }
 }
 
 const loadProducts = async () => {
@@ -215,44 +178,10 @@ const loadInventory = async () => {
   inventory.value = data || []
 }
 
-const loadPets = async () => {
-  const userId = authStore.userId || 1
-  const list = await petAPI.listPetsByUser(userId)
-  const emojiMap: any = { dog: '🐶', cat: '🐱', rabbit: '🐰', hamster: '🐹', parrot: '🦜', fish: '🐠' }
-  pets.value = (list || []).map((p: any) => ({
-    id: p.id,
-    name: p.name,
-    emoji: emojiMap[p.type] || '🐾'
-  }))
-  selectedPetId.value = pets.value[0]?.id || null
-}
-
-const useItem = async (item: any) => {
-  if (!selectedPetId.value) return
-  const userId = authStore.userId || 1
-  try {
-    const res = await shopAPI.use(userId, item.id, selectedPetId.value)
-    item.quantity -= 1
-    if (item.quantity <= 0) {
-      inventory.value = inventory.value.filter(i => i.id !== item.id)
-    }
-    uni.showToast({ title: res?.message || '使用成功', icon: 'success' })
-  } catch (err: any) {
-    uni.showToast({ title: err?.error || '使用失败', icon: 'error' })
-  }
-}
-
 onMounted(async () => {
   try {
-    const tab = typeof route.query.tab === 'string' ? route.query.tab : ''
-    if (tab) activeCategory.value = tab
     await loadCategories()
-    if (activeCategory.value === 'inventory') {
-      await loadInventory()
-      await loadPets()
-    } else {
-      await loadProducts()
-    }
+    await loadProducts()
   } catch (err) {
     uni.showToast({ title: '加载商店失败', icon: 'error' })
   }
@@ -262,75 +191,67 @@ onMounted(async () => {
 <style scoped>
 .shop-container {
   min-height: 100vh;
-  background: radial-gradient(900px 500px at 10% 0%, rgba(255, 209, 102, 0.25), transparent 60%),
-              radial-gradient(700px 500px at 90% 10%, rgba(63, 193, 201, 0.2), transparent 60%),
-              var(--bg-base);
-  padding-bottom: 20px;
+  background: #f8fafc;
 }
 
 .shop-header {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 20px;
+  background: #fff;
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 0 0 20px 20px;
-  box-shadow: var(--shadow);
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .coin-display {
   display: flex;
   align-items: center;
-  background: linear-gradient(45deg, var(--accent-sun), #ffe08a);
-  padding: 8px 16px;
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: #fef3c7;
+  padding: 6px 12px;
+  border-radius: 8px;
 }
 
 .coin-icon {
-  font-size: 18px;
-  margin-right: 5px;
+  font-size: 14px;
+  margin-right: 4px;
 }
 
 .coin-amount {
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: #92400e;
 }
 
 .shop-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
 }
 
 .category-tabs {
   display: flex;
-  padding: 20px 15px 10px;
-  gap: 10px;
+  padding: 12px 16px;
+  gap: 8px;
   overflow-x: auto;
+  background: #fff;
 }
 
 .category-tab {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 15px;
-  min-width: 70px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  padding: 8px 14px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  white-space: nowrap;
 }
 
 .category-tab.active {
-  background: linear-gradient(45deg, var(--accent-mint), #3aafa9);
-  color: white;
-  transform: scale(1.05);
+  background: #22c55e;
+  color: #fff;
 }
 
 .category-icon {
-  font-size: 24px;
-  margin-bottom: 4px;
+  font-size: 14px;
+  margin-right: 4px;
 }
 
 .category-name {
@@ -339,67 +260,18 @@ onMounted(async () => {
 }
 
 .products-list {
-  height: calc(100vh - 200px);
-  padding: 0 15px;
-}
-
-.inventory-list {
-  height: calc(100vh - 200px);
-  padding: 0 15px;
+  height: calc(100vh - 140px);
+  padding: 12px 16px;
 }
 
 .inventory-header {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 6px 0 14px;
+  padding: 8px 0 12px;
 }
 
 .inventory-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.pet-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.picker-label {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.pet-chips {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-}
-
-.pet-chip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 6px 10px;
-  border-radius: 16px;
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
-.pet-chip.active {
-  background: linear-gradient(45deg, var(--accent-mint), #3aafa9);
-  color: white;
-}
-
-.chip-emoji {
-  font-size: 14px;
-}
-
-.chip-name {
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
+  color: #1e293b;
 }
 
 .empty-inventory {
@@ -407,47 +279,41 @@ onMounted(async () => {
   flex-direction: column;
   align-items: center;
   padding: 40px 0;
-  color: var(--text-muted);
 }
 
 .empty-emoji {
-  font-size: 36px;
+  font-size: 40px;
   margin-bottom: 8px;
 }
 
-.inventory-card .buy-button.disabled {
-  opacity: 0.6;
+.empty-text {
+  font-size: 14px;
+  color: #64748b;
 }
 
 .product-card {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  margin-bottom: 12px;
-  padding: 15px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
-  transition: all 0.3s ease;
-}
-
-.product-card:active {
-  transform: scale(0.98);
+  background: #fff;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
 .product-image {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(45deg, #ff9a8b, #ff6b6b);
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  background: #f1f5f9;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 15px;
+  margin-right: 12px;
 }
 
 .product-emoji {
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .product-info {
@@ -455,18 +321,18 @@ onMounted(async () => {
 }
 
 .product-name {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .product-desc {
   font-size: 12px;
-  color: #666;
+  color: #64748b;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .product-price {
@@ -474,27 +340,22 @@ onMounted(async () => {
   align-items: center;
 }
 
-.coin-icon-small {
-  font-size: 14px;
-  margin-right: 3px;
-}
-
 .price-amount {
-  font-weight: bold;
-  color: var(--accent-coral);
+  font-weight: 600;
+  color: #f59e0b;
+  font-size: 13px;
 }
 
 .buy-button {
-  background: linear-gradient(45deg, var(--accent-mint), #3aafa9);
-  padding: 8px 16px;
-  border-radius: 999px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  background: #22c55e;
+  padding: 6px 14px;
+  border-radius: 6px;
 }
 
 .buy-text {
-  color: white;
-  font-weight: bold;
-  font-size: 14px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 /* 详情弹窗 */
@@ -512,65 +373,62 @@ onMounted(async () => {
 }
 
 .detail-content {
-  background: white;
-  border-radius: 20px;
-  padding: 25px;
-  width: 90%;
-  max-width: 350px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  width: 85%;
+  max-width: 320px;
 }
 
 .detail-header {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .detail-emoji {
-  font-size: 40px;
-  margin-right: 15px;
+  font-size: 32px;
+  margin-right: 12px;
 }
 
 .detail-name {
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 18px;
+  font-weight: 600;
   flex: 1;
 }
 
 .close-btn {
-  font-size: 24px;
-  color: #999;
-  cursor: pointer;
+  font-size: 20px;
+  color: #94a3b8;
 }
 
 .detail-description {
-  color: #666;
-  margin-bottom: 15px;
+  color: #64748b;
+  font-size: 14px;
+  margin-bottom: 12px;
   display: block;
 }
 
 .detail-effect {
-  background: #f8f9fa;
-  padding: 12px;
-  border-radius: 10px;
-  margin-bottom: 15px;
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 16px;
 }
 
 .effect-title {
-  font-weight: bold;
-  color: #333;
+  font-weight: 600;
+  color: #1e293b;
 }
 
 .effect-desc {
-  color: #666;
-  font-size: 14px;
+  color: #64748b;
+  font-size: 13px;
 }
 
 .detail-price {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 16px;
 }
 
 .detail-buttons {
@@ -580,19 +438,20 @@ onMounted(async () => {
 
 .cancel-btn, .confirm-btn {
   flex: 1;
-  padding: 12px;
-  border-radius: 25px;
-  font-weight: bold;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 500;
   border: none;
+  font-size: 14px;
 }
 
 .cancel-btn {
-  background: #f8f9fa;
-  color: #666;
+  background: #f1f5f9;
+  color: #64748b;
 }
 
 .confirm-btn {
-  background: linear-gradient(45deg, var(--accent-mint), #3aafa9);
-  color: white;
+  background: #22c55e;
+  color: #fff;
 }
 </style>

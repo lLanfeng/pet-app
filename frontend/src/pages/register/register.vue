@@ -119,109 +119,90 @@ const goToLogin = () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: radial-gradient(900px 500px at 10% -10%, rgba(75, 209, 200, 0.22), transparent 60%),
-              radial-gradient(700px 500px at 90% 0%, rgba(255, 212, 106, 0.28), transparent 55%),
-              var(--bg-base);
-  padding: 20px;
+  background: #f8fafc;
+  padding: 48px 20px 32px;
 }
 
 .register-header {
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 40px;
-  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: 32px;
 }
 
 .title {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e293b;
+  display: block;
+  margin-bottom: 4px;
 }
 
 .subtitle {
   font-size: 14px;
-  opacity: 0.9;
+  color: #64748b;
 }
 
 .form-container {
-  background: white;
-  border-radius: 22px;
-  padding: 30px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #e2e8f0;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .input {
   width: 100%;
-  padding: 12px;
-  border: 2px solid var(--stroke);
-  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 14px;
-  line-height: 1.5;
-  background-color: #fff;
+  background: #fff;
   box-sizing: border-box;
 }
 
 .input:focus {
-  border-color: rgba(75, 209, 200, 0.6);
-  background-color: white;
   outline: none;
+  border-color: #22c55e;
 }
 
 .btn-register {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-coral) 100%);
-  color: white;
+  padding: 12px;
+  background: #22c55e;
+  color: #fff;
   border: none;
-  border-radius: 999px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-top: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 8px;
   cursor: pointer;
-  transition: opacity 0.2s;
-  box-shadow: var(--shadow);
-}
-
-.btn-register:hover:not(:disabled) {
-  opacity: 0.9;
 }
 
 .btn-register:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .btn-login-link {
   width: 100%;
-  padding: 14px;
+  padding: 12px;
   background: transparent;
-  color: var(--accent-coral);
-  border: 2px solid var(--stroke);
-  border-radius: 999px;
-  font-size: 14px;
-  margin-top: 10px;
+  color: #22c55e;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-top: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-login-link:hover {
-  background-color: #fff;
 }
 
 .error-message {
-  color: #ff6b6b;
-  font-size: 14px;
-  margin-top: 20px;
+  color: #ef4444;
+  font-size: 13px;
+  margin-top: 16px;
   text-align: center;
-  background: white;
-  padding: 15px;
+  background: #fef2f2;
+  padding: 12px;
   border-radius: 8px;
 }
 </style>

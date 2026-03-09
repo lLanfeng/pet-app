@@ -2,7 +2,7 @@
   <view class="detail-page">
     <!-- 头部 -->
     <view class="detail-header">
-      <view class="pet-avatar">{{ petEmoji }}</view>
+      <text class="pet-avatar">{{ petEmoji }}</text>
       <view class="pet-info">
         <text class="pet-name">{{ petName }}</text>
         <view class="pet-tags">
@@ -29,7 +29,7 @@
         <text class="stat-icon">🍖</text>
         <text class="stat-name">饱食</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: hunger + '%', background: '#4cd964'}"></view>
+          <view class="stat-fill" :style="{width: hunger + '%', background: '#22c55e'}"></view>
         </view>
         <text class="stat-num">{{ hunger }}%</text>
       </view>
@@ -37,7 +37,7 @@
         <text class="stat-icon">😊</text>
         <text class="stat-name">快乐</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: happiness + '%', background: '#ff9500'}"></view>
+          <view class="stat-fill" :style="{width: happiness + '%', background: '#f59e0b'}"></view>
         </view>
         <text class="stat-num">{{ happiness }}%</text>
       </view>
@@ -45,7 +45,7 @@
         <text class="stat-icon">⚡</text>
         <text class="stat-name">活力</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: energy + '%', background: '#007aff'}"></view>
+          <view class="stat-fill" :style="{width: energy + '%', background: '#3b82f6'}"></view>
         </view>
         <text class="stat-num">{{ energy }}%</text>
       </view>
@@ -129,7 +129,7 @@ const action = (type) => {
       if (experience.value >= expNeed.value) {
         petLevel.value++;
         experience.value = 0;
-        uni.showToast({ title: '🎉 升级了！', icon: 'none' });
+        uni.showToast({ title: '升级了！', icon: 'none' });
       } else {
         uni.showToast({ title: '训练完成 +15经验', icon: 'none' });
       }
@@ -158,28 +158,27 @@ const remove = () => {
 <style scoped>
 .detail-page {
   min-height: 100vh;
-  background: var(--bg-base);
-  padding-bottom: 40px;
+  background: #f8fafc;
 }
 
 .detail-header {
-  background: linear-gradient(135deg, var(--accent-mint), var(--accent-coral));
-  padding: 60px 16px 24px;
+  background: #fff;
+  padding: 48px 16px 20px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .pet-avatar {
-  width: 80px;
-  height: 80px;
-  background: rgba(255,255,255,0.25);
-  border-radius: 22px;
+  width: 72px;
+  height: 72px;
+  background: #f1f5f9;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 44px;
-  border: 2px solid rgba(255,255,255,0.5);
+  font-size: 40px;
 }
 
 .pet-info {
@@ -187,79 +186,76 @@ const remove = () => {
 }
 
 .pet-name {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  color: white;
+  color: #1e293b;
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .pet-tags {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
 .pet-tag {
   font-size: 12px;
-  padding: 4px 10px;
-  background: rgba(255,255,255,0.25);
-  border-radius: 12px;
-  color: white;
-  border: 1px solid rgba(255,255,255,0.4);
+  padding: 4px 8px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  color: #475569;
 }
 
 .exp-card {
   background: #fff;
   margin: 12px 16px;
-  padding: 16px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
 .exp-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .exp-label {
-  font-size: 14px;
-  color: #333;
+  font-size: 13px;
+  color: #475569;
 }
 
 .exp-value {
-  font-size: 14px;
-  color: #07c160;
+  font-size: 13px;
+  color: #22c55e;
   font-weight: 500;
 }
 
 .exp-bar {
   height: 6px;
-  background: #f0f0f0;
+  background: #e2e8f0;
   border-radius: 3px;
   overflow: hidden;
 }
 
 .exp-fill {
   height: 100%;
-  background: linear-gradient(90deg, #07c160, #06ad56);
+  background: #22c55e;
   border-radius: 3px;
 }
 
 .stat-card {
   background: #fff;
   margin: 0 16px 12px;
-  padding: 16px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
 .stat-item {
   display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .stat-item:last-child {
@@ -272,18 +268,18 @@ const remove = () => {
 }
 
 .stat-name {
-  font-size: 14px;
-  color: #333;
-  width: 40px;
+  font-size: 13px;
+  color: #475569;
+  width: 36px;
 }
 
 .stat-bar {
   flex: 1;
   height: 6px;
-  background: #f0f0f0;
+  background: #e2e8f0;
   border-radius: 3px;
   overflow: hidden;
-  margin: 0 12px;
+  margin: 0 10px;
 }
 
 .stat-fill {
@@ -292,68 +288,65 @@ const remove = () => {
 }
 
 .stat-num {
-  font-size: 13px;
-  color: #666;
-  width: 40px;
+  font-size: 12px;
+  color: #64748b;
+  width: 36px;
   text-align: right;
 }
 
 .action-card {
   background: #fff;
   margin: 0 16px 12px;
-  padding: 16px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
 .action-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 14px;
+  color: #1e293b;
+  margin-bottom: 12px;
 }
 
 .action-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  gap: 10px;
 }
 
 .action-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 8px;
-  background: #fff;
-  border-radius: 14px;
-  border: 2px solid var(--stroke);
+  padding: 12px 6px;
+  background: #f8fafc;
+  border-radius: 8px;
 }
 
 .action-icon {
-  font-size: 22px;
-  margin-bottom: 6px;
+  font-size: 20px;
+  margin-bottom: 4px;
 }
 
 .action-name {
-  font-size: 12px;
-  color: #333;
+  font-size: 11px;
+  color: #475569;
 }
 
 .record-card {
   background: #fff;
   margin: 0 16px 12px;
-  padding: 16px;
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
 .record-title {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 12px;
+  color: #1e293b;
+  margin-bottom: 10px;
 }
 
 .record-list {
@@ -364,8 +357,8 @@ const remove = () => {
 .record-item {
   display: flex;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f5f5f5;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .record-item:last-child {
@@ -373,30 +366,29 @@ const remove = () => {
 }
 
 .record-icon {
-  font-size: 16px;
-  margin-right: 10px;
+  font-size: 14px;
+  margin-right: 8px;
 }
 
 .record-text {
   flex: 1;
-  font-size: 14px;
-  color: #333;
+  font-size: 13px;
+  color: #334155;
 }
 
 .record-time {
-  font-size: 12px;
-  color: #999;
+  font-size: 11px;
+  color: #94a3b8;
 }
 
 .delete-btn {
   background: #fff;
-  margin: 24px 16px 0;
+  margin: 20px 16px 0;
   padding: 14px;
-  border-radius: 999px;
+  border-radius: 10px;
   text-align: center;
-  font-size: 15px;
-  color: #ff2d55;
-  border: 2px solid #ff2d55;
-  box-shadow: var(--shadow);
+  font-size: 14px;
+  color: #ef4444;
+  border: 1px solid #ef4444;
 }
 </style>

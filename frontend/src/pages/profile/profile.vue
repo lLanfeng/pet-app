@@ -136,31 +136,31 @@ const logout = () => {
 <style scoped>
 .profile-page {
   min-height: 100vh;
-  background: var(--bg-base);
-  padding-bottom: 40px;
+  background: #f8fafc;
+  padding-bottom: 32px;
 }
 
 .profile-header {
-  background: linear-gradient(135deg, var(--accent-mint), var(--accent-coral));
-  padding: 60px 20px 24px;
-  border-bottom: 2px solid rgba(255,255,255,0.35);
+  background: #fff;
+  padding: 48px 20px 20px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .user-box {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
 }
 
 .avatar {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, var(--accent-lav), #8aa7ff);
-  border-radius: 18px;
+  width: 56px;
+  height: 56px;
+  background: #f1f5f9;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 28px;
 }
 
 .user-info {
@@ -169,26 +169,25 @@ const logout = () => {
 }
 
 .nickname {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
-  color: white;
+  color: #1e293b;
 }
 
 .user-id {
-  font-size: 14px;
-  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  color: #64748b;
   margin-top: 2px;
 }
 
 .assets-card {
   background: #fff;
-  margin: 16px 20px;
-  border-radius: 18px;
-  padding: 24px;
+  margin: 16px;
+  border-radius: 12px;
+  padding: 20px;
   display: flex;
   justify-content: space-around;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  border: 1px solid #e2e8f0;
 }
 
 .asset-cell {
@@ -198,31 +197,30 @@ const logout = () => {
 }
 
 .asset-num {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #1e293b;
 }
 
 .asset-label {
-  font-size: 13px;
-  color: #86868b;
+  font-size: 12px;
+  color: #64748b;
   margin-top: 4px;
 }
 
 .asset-divider {
   width: 1px;
-  background: #e5e5ea;
+  background: #e2e8f0;
 }
 
 .stats-card {
   background: #fff;
-  margin: 0 20px 16px;
-  border-radius: 18px;
-  padding: 20px;
+  margin: 0 16px 16px;
+  border-radius: 12px;
+  padding: 16px;
   display: flex;
   justify-content: space-around;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  border: 1px solid #e2e8f0;
 }
 
 .stat-cell {
@@ -232,31 +230,30 @@ const logout = () => {
 }
 
 .stat-num {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  color: #1d1d1f;
+  color: #1e293b;
 }
 
 .stat-label {
-  font-size: 13px;
-  color: #86868b;
+  font-size: 12px;
+  color: #64748b;
   margin-top: 4px;
 }
 
 .menu-card {
   background: #fff;
-  margin: 0 20px;
-  border-radius: 18px;
+  margin: 0 16px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  border: 1px solid #e2e8f0;
 }
 
 .menu-cell {
   display: flex;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #f5f5f5;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .menu-cell:last-child {
@@ -264,30 +261,29 @@ const logout = () => {
 }
 
 .menu-icon {
-  font-size: 20px;
-  margin-right: 14px;
+  font-size: 18px;
+  margin-right: 12px;
 }
 
 .menu-text {
   flex: 1;
-  font-size: 16px;
-  color: #1d1d1f;
+  font-size: 15px;
+  color: #1e293b;
 }
 
 .menu-arrow {
-  color: #c7c7cc;
-  font-size: 20px;
+  color: #cbd5e1;
+  font-size: 18px;
 }
 
 .logout-btn {
   background: #fff;
-  margin: 24px 20px 0;
-  padding: 16px;
-  border-radius: 14px;
+  margin: 20px 16px 0;
+  padding: 14px;
+  border-radius: 10px;
   text-align: center;
-  font-size: 16px;
-  color: #ff3b30;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--stroke);
+  font-size: 14px;
+  color: #ef4444;
+  border: 1px solid #e2e8f0;
 }
 </style>

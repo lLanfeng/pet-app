@@ -111,12 +111,11 @@ const goRegister = () => router.push('/register');
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: var(--bg-base);
+  background: #f8fafc;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 80px 32px 40px;
-  box-sizing: border-box;
+  padding: 60px 24px 32px;
 }
 
 .login-main {
@@ -125,129 +124,123 @@ const goRegister = () => router.push('/register');
 
 .login-header {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 40px;
 }
 
 .logo-box {
-  width: 72px;
-  height: 72px;
-  background: linear-gradient(135deg, var(--accent-lav), var(--accent-coral));
-  border-radius: 22px;
+  width: 64px;
+  height: 64px;
+  background: #f1f5f9;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 20px;
-  box-shadow: var(--shadow);
-  border: 2px solid rgba(255,255,255,0.5);
+  margin: 0 auto 16px;
 }
 
 .logo {
-  font-size: 36px;
+  font-size: 32px;
 }
 
 .title {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 6px;
+  color: #1e293b;
+  margin-bottom: 4px;
 }
 
 .subtitle {
-  font-size: 15px;
-  color: var(--text-muted);
+  font-size: 14px;
+  color: #64748b;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .input-wrap .input {
   width: 100%;
-  padding: 16px;
+  padding: 14px 16px;
   background: #fff;
-  border: 2px solid var(--stroke);
-  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
   font-size: 15px;
   box-sizing: border-box;
 }
 
 .input-wrap .input:focus {
   outline: none;
-  background: #fff;
-  border-color: rgba(75, 209, 200, 0.5);
+  border-color: #22c55e;
 }
 
 .form-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 4px;
 }
 
 .remember {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--text-muted);
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
 }
 
 .remember input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent-mint);
+  width: 16px;
+  height: 16px;
+  accent-color: #22c55e;
 }
 
 .forgot {
-  font-size: 14px;
-  color: var(--accent-coral);
+  font-size: 13px;
+  color: #22c55e;
 }
 
 .login-btn {
   width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--accent-mint), var(--accent-coral));
+  padding: 14px;
+  background: #22c55e;
   color: #fff;
   border: none;
-  border-radius: 999px;
-  font-size: 17px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 500;
   margin-top: 8px;
-  box-shadow: var(--shadow);
 }
 
 .demo-btn {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   background: #fff;
-  color: var(--text-primary);
-  border: 2px solid var(--stroke);
-  border-radius: 999px;
-  font-size: 16px;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
 }
 
 .register {
   text-align: center;
-  margin-top: 32px;
-  font-size: 15px;
-  color: var(--text-muted);
+  margin-top: 24px;
+  font-size: 14px;
+  color: #64748b;
 }
 
 .register span {
-  color: var(--accent-coral);
-  margin-left: 4px;
+  color: #22c55e;
 }
 
 .agreement {
   text-align: center;
   font-size: 12px;
-  color: var(--text-muted);
+  color: #94a3b8;
 }
 
 .agreement span {
-  color: var(--accent-coral);
-  margin: 0 2px;
+  color: #22c55e;
+  margin: 0 4px;
 }
 </style>
