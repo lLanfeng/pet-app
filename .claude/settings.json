@@ -1,0 +1,51 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for file:*)",
+      "Bash(mkdir -p \"c:/Users/PC/.claude/skills/ui-ux-pro-max/data\")",
+      "Bash(mkdir -p \"c:/Users/PC/.claude/skills/ui-ux-pro-max/scripts\")",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Bash(npm run:*)",
+      "Bash(curl -s -I http://localhost:5173)",
+      "Bash(npx playwright:*)",
+      "Bash(node test-pages.js)",
+      "Bash(mv \"C:/Users/PC/Desktop/工作开发/小程序/frontend/test-pages.js\" \"C:/Users/PC/Desktop/工作开发/小程序/frontend/test-pages.cjs\")",
+      "Bash(node test-pages.cjs)",
+      "Bash(python scripts/search.py \"pet care mobile app cute playful\" --design-system -p \"Pet Care App\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173/pets/detail?id=5)",
+      "Bash(python scripts/search.py \"pet mobile app cute playful adorable\" --design-system -p \"Pet Detail\")",
+      "Bash(python scripts/search.py \"pop art colorful kawaii mobile\" --domain style -n 5)",
+      "Bash(curl -s http://localhost:5173/tasks)",
+      "Bash(node test-errors.cjs)",
+      "Bash(python scripts/search.py \"kawaii cute cartoon playful pet mobile app\" --design-system -p \"Cute Pet App\")",
+      "WebFetch(domain:minimax-algeng-chat-tts.oss-cn-wulanchabu.aliyuncs.com)",
+      "Bash(npm install:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)",
+      "Bash(taskkill //F //PID 25468)",
+      "Bash(mysql -u root -p123456 -e \"CREATE DATABASE IF NOT EXISTS petapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")",
+      "Bash(\"C:\\\\Program Files\\\\MySQL\\\\MySQL Server 8.0\\\\bin\\\\mysql.exe\" -u root -p123456 -e \"CREATE DATABASE IF NOT EXISTS petapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;\")",
+      "Bash(node -e \"const mysql = require\\(''mysql2/promise''\\); mysql.createConnection\\({host:''localhost'',user:''root'',password:''123456''}\\).then\\(c=>c.execute\\(''CREATE DATABASE IF NOT EXISTS petapp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci''\\).then\\(\\(\\)=>{console.log\\(''Database created''\\);process.exit\\(0\\)}\\).catch\\(e=>{console.error\\(e\\);process.exit\\(1\\)}\\)\\)\")",
+      "Bash(taskkill //F //PID 60292)",
+      "Bash(curl -s http://localhost:3000/api/shop)",
+      "Bash(node -e \"const http = require\\(''http''\\); http.get\\(''http://localhost:3000/api/shop'', res => { let data = ''''; res.on\\(''data'', chunk => data += chunk\\); res.on\\(''end'', \\(\\) => console.log\\(data.slice\\(0,500\\)\\)\\); }\\).on\\(''error'', console.error\\);\")",
+      "Bash(powershell -command \"Compress-Archive -Path dist -DestinationPath dist.zip -Force\")",
+      "Bash(powershell -Command \"Compress-Archive -Path ''dist\\\\*'' -DestinationPath ''dist.zip'' -Force\")",
+      "Bash(scp -o StrictHostKeyChecking=no dist.zip root@47.116.44.135:/root/)",
+      "Bash(sshpass -p 'Mypassword.123' scp -o StrictHostKeyChecking=no -o PreferredAuthentications=password dist.zip root@47.116.44.135:/root/)",
+      "Bash(where sshpass:*)",
+      "Bash(choco --version)",
+      "Read(//c/Users/PC/.ssh//**)",
+      "Bash(scp -i /c/Users/PC/.ssh/id_rsa -o StrictHostKeyChecking=no dist.zip root@47.116.44.135:/root/)",
+      "Bash(where pscp:*)",
+      "Read(//c/Program Files \\(x86\\)/PuTTY/**)",
+      "Read(//c/Program Files/PuTTY/**)",
+      "Bash(ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@47.116.44.135 \"pm2 logs petapp-backend --lines 20 --nostream\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\PC\\.claude\\skills\\ui-ux-pro-max\\data"
+    ]
+  }
+}
