@@ -1,12 +1,51 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/pages/index/index.vue')
+    redirect: '/home'
   },
+  {
+    path: '/home',
+    name: 'Home',
+    component: () => import('@/pages/home/home.vue')
+  },
+  {
+    path: '/encyclopedia',
+    name: 'Encyclopedia',
+    component: () => import('@/pages/encyclopedia/encyclopedia.vue')
+  },
+  {
+    path: '/community',
+    name: 'Community',
+    component: () => import('@/pages/community/community.vue')
+  },
+  {
+    path: '/messages',
+    name: 'Messages',
+    component: () => import('@/pages/messages/messages.vue')
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/pages/profile/profile.vue')
+  },
+  {
+    path: '/explore',
+    name: 'Explore',
+    component: () => import('@/pages/explore/explore.vue')
+  },
+  {
+    path: '/create-post',
+    name: 'CreatePost',
+    component: () => import('@/pages/create-post/create-post.vue')
+  },
+  {
+    path: '/pet-detail',
+    name: 'PetDetail',
+    component: () => import('@/pages/pet-detail/pet-detail.vue')
+  },
+  // 保留旧路由兼容
   {
     path: '/login',
     name: 'Login',
@@ -20,20 +59,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/pets',
     name: 'Pets',
-    component: () => import('@/pages/pets/pets.vue'),
-    meta: { requiresAuth: false }
+    component: () => import('@/pages/pets/pets.vue')
   },
   {
     path: '/pets/add',
     name: 'AddPet',
-    component: () => import('@/pages/pets/add.vue'),
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/pets/detail',
-    name: 'PetDetail',
-    component: () => import('@/pages/pets/detail.vue'),
-    meta: { requiresAuth: false }
+    component: () => import('@/pages/pets/add.vue')
   },
   {
     path: '/shop',
@@ -56,21 +87,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/pages/settings/settings.vue')
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('@/pages/profile/profile.vue')
-  },
-  {
-    path: '/community',
-    name: 'Community',
-    component: () => import('@/pages/community/community.vue')
-  },
-  {
-    path: '/mail',
-    name: 'Mail',
-    component: () => import('@/pages/mail/mail.vue')
-  },
-  {
     path: '/achievements',
     name: 'Achievements',
     component: () => import('@/pages/achievements/achievements.vue')
@@ -81,19 +97,5 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 });
-
-// 移除登录拦截，让用户可以自由浏览
-// 如需开启登录拦截，只需添加以下代码：
-/*
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  
-  if (to.meta.requiresAuth && !authStore.isLoggedIn) {
-    next('/login');
-  } else {
-    next();
-  }
-});
-*/
 
 export default router;

@@ -4,7 +4,16 @@
       "Bash(gh api:*)",
       "Bash(for skill:*)",
       "Bash(do mkdir:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(node check2.cjs)",
+      "Bash(node check3.cjs)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(node check4.cjs)",
+      "Bash(node check5.cjs)",
+      "Bash(node check6.cjs)",
+      "Bash(node check7.cjs)",
+      "Bash(node check8.cjs)",
+      "Bash(node check9.cjs)"
     ]
   }
 }
