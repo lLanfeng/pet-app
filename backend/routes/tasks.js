@@ -12,72 +12,52 @@ const TASKS = [
   { id: 6, key: 'pet_level', title: '宠物大师', description: '宠物达到等级 10', emoji: '⭐', target: 10, reward: { coins: 100, exp: 50 } }
 ];
 
-const getMaxPetLevel = userId =>
-  new Promise((resolve, reject) => {
-    db.get(`SELECT MAX(level) as maxLevel FROM pets WHERE user_id = ?`, [userId], (err, row) => {
-      if (err) return reject(err);
-      resolve(row?.maxLevel || 0);
-    });
-  });
+const getMaxPetLevel = async (userId) => {
+  const row = await db.get(`SELECT MAX(level) as maxLevel FROM pets WHERE user_id = ?`, [userId]);
+  return row?.maxLevel || 0;
+};
 
-const isClaimed = (userId, taskId, date) =>
-  new Promise((resolve, reject) => {
-    db.get(
-      `SELECT id FROM user_task_claims WHERE user_id = ? AND task_id = ? AND claim_date = ?`,
-      [userId, taskId, date],
-      (err, row) => {
-        if (err) return reject(err);
-        resolve(!!row);
-      }
-    );
-  });
+const isClaimed = async (userId, taskId, date) => {
+  const row = await db.get(
+    `SELECT id FROM user_task_claims WHERE user_id = ? AND task_id = ? AND claim_date = ?`,
+    [userId, taskId, date]
+  );
+  return !!row;
+};
 
-const claimTask = (userId, taskId, date) =>
-  new Promise((resolve, reject) => {
-    db.run(
-      `INSERT INTO user_task_claims (user_id, task_id, claim_date) VALUES (?, ?, ?)`,
-      [userId, taskId, date],
-      function (err) {
-        if (err) return reject(err);
-        resolve(this.lastID);
-      }
-    );
-  });
+const claimTask = async (userId, taskId, date) => {
+  const result = await db.run(
+    `INSERT INTO user_task_claims (user_id, task_id, claim_date) VALUES (?, ?, ?)`,
+    [userId, taskId, date]
+  );
+  return result.insertId;
+};
 
-const addCoins = (userId, coins) =>
-  new Promise((resolve, reject) => {
-    db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [coins, userId], function (err) {
-      if (err) return reject(err);
-      resolve(this.changes);
-    });
-  });
+const addCoins = async (userId, coins) => {
+  const result = await db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [coins, userId]);
+  return result.affectedRows;
+};
 
-const addExpToTopPet = (userId, exp) =>
-  new Promise((resolve, reject) => {
-    db.get(
-      `SELECT id, level, experience FROM pets WHERE user_id = ? ORDER BY level DESC, experience DESC LIMIT 1`,
-      [userId],
-      (err, pet) => {
-        if (err) return reject(err);
-        if (!pet) return resolve(null);
-        const expNeeded = pet.level * 100;
-        let newLevel = pet.level;
-        let newExp = pet.experience + exp;
-        if (newExp >= expNeeded) {
-          newLevel += 1;
-          newExp = newExp - expNeeded;
-        }
-        db.run(
-          `UPDATE pets SET level = ?, experience = ?, updated_at = datetime('now') WHERE id = ?`,
-          [newLevel, newExp, pet.id],
-          err2 => {
-            if (err2) return reject(err2);
-            resolve({ id: pet.id, level: newLevel, experience: newExp });
-          }
-        );
-      }
-    );
-  });
+const addExpToTopPet = async (userId, exp) => {
+  const pet = await db.get(
+    `SELECT id, level, experience FROM pets WHERE user_id = ? ORDER BY level DESC, experience DESC LIMIT 1`,
+    [userId]
+  );
+  if (!pet) return null;
+
+  const expNeeded = pet.level * 100;
+  let newLevel = pet.level;
+  let newExp = pet.experience + exp;
+  if (newExp >= expNeeded) {
+    newLevel += 1;
+    newExp = newExp - expNeeded;
+  }
+  await db.run(
+    `UPDATE pets SET level = ?, experience = ?, updated_at = NOW() WHERE id = ?`,
+    [newLevel, newExp, pet.id]
+  );
+  return { id: pet.id, level: newLevel, experience: newExp };
+};
 
 const buildTasks = async userId => {
   const today = statsModel.todayStr();

@@ -24,53 +24,36 @@ const ACHIEVEMENTS = {
   ]
 };
 
-const getPetsCount = userId =>
-  new Promise((resolve, reject) => {
-    db.get(`SELECT COUNT(1) as cnt FROM pets WHERE user_id = ?`, [userId], (err, row) => {
-      if (err) return reject(err);
-      resolve(row?.cnt || 0);
-    });
-  });
+const getPetsCount = async (userId) => {
+  const row = await db.get(`SELECT COUNT(1) as cnt FROM pets WHERE user_id = ?`, [userId]);
+  return row?.cnt || 0;
+};
 
-const getMaxPetLevel = userId =>
-  new Promise((resolve, reject) => {
-    db.get(`SELECT MAX(level) as maxLevel FROM pets WHERE user_id = ?`, [userId], (err, row) => {
-      if (err) return reject(err);
-      resolve(row?.maxLevel || 0);
-    });
-  });
+const getMaxPetLevel = async (userId) => {
+  const row = await db.get(`SELECT MAX(level) as maxLevel FROM pets WHERE user_id = ?`, [userId]);
+  return row?.maxLevel || 0;
+};
 
-const getUserCoins = userId =>
-  new Promise((resolve, reject) => {
-    db.get(`SELECT coins FROM users WHERE id = ?`, [userId], (err, row) => {
-      if (err) return reject(err);
-      resolve(row?.coins || 0);
-    });
-  });
+const getUserCoins = async (userId) => {
+  const row = await db.get(`SELECT coins FROM users WHERE id = ?`, [userId]);
+  return row?.coins || 0;
+};
 
-const isClaimed = (userId, achievementId) =>
-  new Promise((resolve, reject) => {
-    db.get(
-      `SELECT id FROM user_achievement_claims WHERE user_id = ? AND achievement_id = ?`,
-      [userId, achievementId],
-      (err, row) => {
-        if (err) return reject(err);
-        resolve(!!row);
-      }
-    );
-  });
+const isClaimed = async (userId, achievementId) => {
+  const row = await db.get(
+    `SELECT id FROM user_achievement_claims WHERE user_id = ? AND achievement_id = ?`,
+    [userId, achievementId]
+  );
+  return !!row;
+};
 
-const claimAchievement = (userId, achievementId) =>
-  new Promise((resolve, reject) => {
-    db.run(
-      `INSERT INTO user_achievement_claims (user_id, achievement_id) VALUES (?, ?)`,
-      [userId, achievementId],
-      function (err) {
-        if (err) return reject(err);
-        resolve(this.lastID);
-      }
-    );
-  });
+const claimAchievement = async (userId, achievementId) => {
+  const result = await db.run(
+    `INSERT INTO user_achievement_claims (user_id, achievement_id) VALUES (?, ?)`,
+    [userId, achievementId]
+  );
+  return result.insertId;
+};
 
 // 获取所有成就
 router.get('/', async (req, res) => {
@@ -151,7 +134,7 @@ router.post('/:id/claim', async (req, res) => {
       break;
     }
   }
-  
+
   if (!achievement) {
     return res.status(404).json({ error: '成就不存在' });
   }
@@ -184,10 +167,10 @@ router.post('/:id/claim', async (req, res) => {
     await claimAchievement(userId, achievementId);
 
     if (achievement.reward?.coins) {
-      db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [achievement.reward.coins, userId]);
+      await db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [achievement.reward.coins, userId]);
     }
     if (achievement.reward?.diamonds) {
-      db.run(`UPDATE users SET diamonds = diamonds + ? WHERE id = ?`, [achievement.reward.diamonds, userId]);
+      await db.run(`UPDATE users SET diamonds = diamonds + ? WHERE id = ?`, [achievement.reward.diamonds, userId]);
     }
 
     res.json({

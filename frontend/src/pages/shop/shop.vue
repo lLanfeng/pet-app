@@ -191,24 +191,25 @@ onMounted(async () => {
 <style scoped>
 .shop-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .shop-header {
-  background: #fff;
-  padding: 16px 20px;
+  background: var(--primary);
+  padding: 50px 16px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .coin-display {
   display: flex;
   align-items: center;
-  background: #fef3c7;
+  background: rgba(255, 255, 255, 0.2);
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-full);
 }
 
 .coin-icon {
@@ -218,35 +219,39 @@ onMounted(async () => {
 
 .coin-amount {
   font-weight: 600;
-  color: #92400e;
+  color: #fff;
+  font-size: 13px;
 }
 
 .shop-title {
   font-size: 18px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
+/* 分类 */
 .category-tabs {
   display: flex;
   padding: 12px 16px;
   gap: 8px;
   overflow-x: auto;
-  background: #fff;
+  background: var(--bg-card);
+  margin: 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .category-tab {
   display: flex;
   align-items: center;
   padding: 8px 14px;
-  background: #f1f5f9;
-  border-radius: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
 .category-tab.active {
-  background: #22c55e;
-  color: #fff;
+  background: var(--primary);
 }
 
 .category-icon {
@@ -255,13 +260,13 @@ onMounted(async () => {
 }
 
 .category-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 
+/* 列表 */
 .products-list {
-  height: calc(100vh - 140px);
-  padding: 12px 16px;
+  padding: 0 16px;
 }
 
 .inventory-header {
@@ -271,41 +276,42 @@ onMounted(async () => {
 .inventory-title {
   font-size: 15px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 .empty-inventory {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 0;
+  padding: 60px 0;
 }
 
 .empty-emoji {
-  font-size: 40px;
-  margin-bottom: 8px;
+  font-size: 48px;
+  margin-bottom: 12px;
 }
 
 .empty-text {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
+/* 商品卡片 */
 .product-card {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: var(--bg-card);
   margin-bottom: 10px;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .product-image {
   width: 48px;
   height: 48px;
-  background: #f1f5f9;
-  border-radius: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -323,14 +329,14 @@ onMounted(async () => {
 .product-name {
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 2px;
 }
 
 .product-desc {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
   display: block;
   margin-bottom: 4px;
 }
@@ -342,14 +348,14 @@ onMounted(async () => {
 
 .price-amount {
   font-weight: 600;
-  color: #f59e0b;
+  color: var(--accent);
   font-size: 13px;
 }
 
 .buy-button {
-  background: #22c55e;
-  padding: 6px 14px;
-  border-radius: 6px;
+  background: var(--primary);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
 }
 
 .buy-text {
@@ -358,7 +364,7 @@ onMounted(async () => {
   font-weight: 500;
 }
 
-/* 详情弹窗 */
+/* 弹窗 */
 .detail-modal {
   position: fixed;
   top: 0;
@@ -373,11 +379,11 @@ onMounted(async () => {
 }
 
 .detail-content {
-  background: #fff;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
   padding: 20px;
   width: 85%;
-  max-width: 320px;
+  max-width: 300px;
 }
 
 .detail-header {
@@ -387,7 +393,7 @@ onMounted(async () => {
 }
 
 .detail-emoji {
-  font-size: 32px;
+  font-size: 36px;
   margin-right: 12px;
 }
 
@@ -395,35 +401,38 @@ onMounted(async () => {
   font-size: 18px;
   font-weight: 600;
   flex: 1;
+  color: var(--text-primary);
 }
 
 .close-btn {
-  font-size: 20px;
-  color: #94a3b8;
+  font-size: 18px;
+  color: var(--text-muted);
+  padding: 4px;
 }
 
 .detail-description {
-  color: #64748b;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
   margin-bottom: 12px;
   display: block;
 }
 
 .detail-effect {
-  background: #f8fafc;
+  background: var(--bg-gray);
   padding: 10px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   margin-bottom: 16px;
 }
 
 .effect-title {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
+  font-size: 13px;
 }
 
 .effect-desc {
-  color: #64748b;
-  font-size: 13px;
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 
 .detail-price {
@@ -438,20 +447,20 @@ onMounted(async () => {
 
 .cancel-btn, .confirm-btn {
   flex: 1;
-  padding: 10px;
-  border-radius: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
   font-weight: 500;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .cancel-btn {
-  background: #f1f5f9;
-  color: #64748b;
+  background: var(--bg-gray);
+  color: var(--text-secondary);
 }
 
 .confirm-btn {
-  background: #22c55e;
+  background: var(--primary);
   color: #fff;
 }
 </style>

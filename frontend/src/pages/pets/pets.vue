@@ -96,80 +96,86 @@ onMounted(() => {
 
 <style scoped>
 .pets-container {
-  background: #f8fafc;
+  background: var(--bg-page);
   min-height: 100vh;
+  padding-bottom: 32px;
 }
 
+/* 头部 */
 .header {
-  background: #fff;
-  padding: 48px 20px 16px;
+  background: var(--primary);
+  padding: 50px 16px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .title {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
 .btn-add {
-  background: #22c55e;
+  background: rgba(255, 255, 255, 0.2);
   color: #fff;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-full);
   font-size: 13px;
+  font-weight: 500;
   border: none;
 }
 
+/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 60px 20px;
 }
 
 .empty-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
+  font-size: 56px;
+  margin-bottom: 14px;
 }
 
 .empty-title {
   font-size: 18px;
   font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 8px;
+  color: var(--text-primary);
+  margin-bottom: 6px;
 }
 
 .empty-desc {
   font-size: 14px;
-  color: #64748b;
-  margin-bottom: 24px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
 }
 
 .btn-create {
-  background: #22c55e;
+  background: var(--primary);
   color: #fff;
-  padding: 12px 32px;
-  border-radius: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-md);
   font-size: 14px;
+  font-weight: 500;
   border: none;
 }
 
+/* 宠物网格 */
 .pets-grid {
-  padding: 16px;
+  padding: 12px 16px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
 }
 
 .pet-card {
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  border: 1px solid var(--border);
 }
 
 .pet-avatar {
@@ -186,16 +192,16 @@ onMounted(() => {
 
 .pet-name {
   display: block;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 2px;
 }
 
 .pet-type {
   display: block;
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .pet-level {
@@ -204,12 +210,12 @@ onMounted(() => {
 }
 
 .level-badge {
-  background: #e2e8f0;
-  padding: 3px 10px;
-  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
   font-size: 11px;
   font-weight: 500;
-  color: #475569;
+  color: var(--primary);
 }
 
 .pet-stats {
@@ -226,20 +232,21 @@ onMounted(() => {
 
 .stat-label {
   font-size: 10px;
-  color: #64748b;
-  width: 24px;
+  font-weight: 500;
+  color: var(--text-muted);
+  width: 22px;
 }
 
 .stat-bar {
   flex: 1;
-  height: 4px;
-  background: #e2e8f0;
-  border-radius: 2px;
+  height: 5px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .stat-fill {
   height: 100%;
-  border-radius: 2px;
+  border-radius: var(--radius-full);
 }
 </style>

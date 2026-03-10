@@ -78,71 +78,77 @@ const switchTab = (id: string) => {
 <style scoped>
 .mail-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .mail-header {
-  background: #fff;
-  padding: 20px;
+  background: var(--primary);
+  padding: 50px 16px 20px;
   text-align: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .title {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
-}
-
-.mail-tabs {
-  display: flex;
-  background: #fff;
-  padding: 12px 16px;
-  gap: 12px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.tab {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.tab.active {
-  background: #22c55e;
   color: #fff;
 }
 
-.mail-list {
+/* 标签 */
+.mail-tabs {
+  display: flex;
+  background: var(--bg-card);
   padding: 12px 16px;
-  height: calc(100vh - 120px);
+  gap: 8px;
+  margin: 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.tab {
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* 列表 */
+.mail-list {
+  padding: 0 16px;
 }
 
 .mail-item {
   display: flex;
-  background: #fff;
-  border-radius: 10px;
-  padding: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 12px;
   margin-bottom: 10px;
   position: relative;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .mail-item.unread {
-  background: #f0fdf4;
+  background: #F0FDF4;
+  border-color: var(--success);
 }
 
 .mail-icon {
   width: 40px;
   height: 40px;
-  background: #f1f5f9;
-  border-radius: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin-right: 12px;
+  font-size: 20px;
+  margin-right: 10px;
 }
 
 .mail-content {
@@ -158,29 +164,30 @@ const switchTab = (id: string) => {
 .mail-title {
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 .mail-time {
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .mail-desc {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .unread-dot {
   width: 8px;
   height: 8px;
-  background: #ef4444;
+  background: var(--error);
   border-radius: 50%;
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 12px;
+  right: 12px;
 }
 
+/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -190,6 +197,6 @@ const switchTab = (id: string) => {
 
 .empty-text {
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 </style>

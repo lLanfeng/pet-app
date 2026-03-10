@@ -1,60 +1,51 @@
 const db = require('../db');
 const statsModel = require('./stats');
 
-function createUser(phone, nickname, password, callback) {
-  const sql = `INSERT INTO users (phone, nickname, password_hash, coins, diamonds, level, created_at) VALUES (?,?,?,?,?,?,datetime('now'))`;
-  db.run(sql, [phone, nickname, password, 100, 0, 1], function(err) {
-    if (err) return callback(err);
-    const userId = this && this.lastID;
-    statsModel.ensureStatsRow(userId).finally(() => {
-      callback(null, userId);
-    });
-  });
+async function createUser(phone, nickname, password) {
+  const sql = `INSERT INTO users (phone, nickname, password_hash, coins, diamonds, level) VALUES (?,?,?,?,?,?)`;
+  const result = await db.run(sql, [phone, nickname, password, 100, 0, 1]);
+  const userId = result.insertId;
+  await statsModel.ensureStatsRow(userId);
+  return userId;
 }
 
-function getUserById(id, callback) {
-  db.get(`SELECT * FROM users WHERE id = ?`, [id], callback);
+async function getUserById(id) {
+  return await db.get(`SELECT * FROM users WHERE id = ?`, [id]);
 }
 
-function getUserByPhone(phone, callback) {
-  db.get(`SELECT * FROM users WHERE phone = ?`, [phone], callback);
+async function getUserByPhone(phone) {
+  return await db.get(`SELECT * FROM users WHERE phone = ?`, [phone]);
 }
 
-function verifyUserPassword(phone, password, callback) {
-  db.get(`SELECT * FROM users WHERE phone = ?`, [phone], (err, row) => {
-    if (err) return callback(err, null);
-    if (!row) return callback(null, null);
-    if (password === row.password_hash) {
-      const { password_hash, ...userWithoutPassword } = row;
-      callback(null, userWithoutPassword);
-    } else {
-      callback(null, null);
-    }
-  });
+async function verifyUserPassword(phone, password) {
+  const row = await db.get(`SELECT * FROM users WHERE phone = ?`, [phone]);
+  if (!row) return null;
+  if (password === row.password_hash) {
+    const { password_hash, ...userWithoutPassword } = row;
+    return userWithoutPassword;
+  }
+  return null;
 }
 
-function updateUserCoins(userId, coins, callback) {
-  db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [coins, userId], function(err) {
-    callback(err, this && this.changes);
-  });
+async function updateUserCoins(userId, coins) {
+  const result = await db.run(`UPDATE users SET coins = coins + ? WHERE id = ?`, [coins, userId]);
+  return result.affectedRows;
 }
 
-function updateUserDiamonds(userId, diamonds, callback) {
-  db.run(`UPDATE users SET diamonds = diamonds + ? WHERE id = ?`, [diamonds, userId], function(err) {
-    callback(err, this && this.changes);
-  });
+async function updateUserDiamonds(userId, diamonds) {
+  const result = await db.run(`UPDATE users SET diamonds = diamonds + ? WHERE id = ?`, [diamonds, userId]);
+  return result.affectedRows;
 }
 
-function updateUserLevel(userId, level, callback) {
-  db.run(`UPDATE users SET level = ? WHERE id = ?`, [level, userId], function(err) {
-    callback(err, this && this.changes);
-  });
+async function updateUserLevel(userId, level) {
+  const result = await db.run(`UPDATE users SET level = ? WHERE id = ?`, [level, userId]);
+  return result.affectedRows;
 }
 
-function updateUserInfo(userId, data, callback) {
+async function updateUserInfo(userId, data) {
   const fields = [];
   const values = [];
-  
+
   if (data.nickname) {
     fields.push('nickname = ?');
     values.push(data.nickname);
@@ -63,15 +54,14 @@ function updateUserInfo(userId, data, callback) {
     fields.push('avatar = ?');
     values.push(data.avatar);
   }
-  
+
   if (fields.length === 0) {
-    return callback(null, 0);
+    return 0;
   }
-  
+
   values.push(userId);
-  db.run(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`, values, function(err) {
-    callback(err, this && this.changes);
-  });
+  const result = await db.run(`UPDATE users SET ${fields.join(', ')} WHERE id = ?`, values);
+  return result.affectedRows;
 }
 
 module.exports = {

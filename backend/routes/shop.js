@@ -40,17 +40,17 @@ const findProduct = productId => {
 // 获取所有商品
 router.get('/', (req, res) => {
   const { category } = req.query;
-  
+
   if (category && products[category]) {
     return res.json(products[category].map(p => ({ ...p, category })));
   }
-  
+
   // 返回所有商品
   const allProducts = [];
   Object.entries(products).forEach(([cat, list]) => {
     allProducts.push(...list.map(p => ({ ...p, category: cat })));
   });
-  
+
   res.json(allProducts);
 });
 
@@ -65,84 +65,102 @@ router.get('/categories', (req, res) => {
 });
 
 // 购买商品
-router.post('/buy', (req, res) => {
+router.post('/buy', async (req, res) => {
   const { userId, productId, quantity = 1 } = req.body;
   if (!userId || !productId) {
     return res.status(400).json({ error: '缺少参数' });
   }
 
   const product = findProduct(productId);
-  
+
   if (!product) {
     return res.status(404).json({ error: '商品不存在' });
   }
-  
+
   const totalCost = product.price * quantity;
 
-  db.get(`SELECT coins FROM users WHERE id = ?`, [userId], (err, user) => {
-    if (err || !user) {
+  try {
+    const user = await db.get(`SELECT coins FROM users WHERE id = ?`, [userId]);
+    if (!user) {
       return res.status(404).json({ error: '用户不存在' });
     }
     if ((user.coins || 0) < totalCost) {
       return res.status(400).json({ error: '金币不足' });
     }
 
-    db.serialize(() => {
-      db.run('BEGIN TRANSACTION');
-      db.run(`UPDATE users SET coins = coins - ? WHERE id = ?`, [totalCost, userId]);
-      db.run(
-        `INSERT INTO user_inventory (user_id, product_id, quantity) 
-         VALUES (?, ?, ?) 
-         ON CONFLICT(user_id, product_id) DO UPDATE SET quantity = quantity + excluded.quantity`,
-        [userId, productId, quantity]
+    // Start transaction
+    const pool = db.getPool();
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Deduct coins
+      await connection.execute(`UPDATE users SET coins = coins - ? WHERE id = ?`, [totalCost, userId]);
+
+      // Insert or update inventory - MySQL syntax
+      await connection.execute(
+        `INSERT INTO user_inventory (user_id, product_id, quantity)
+         VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE quantity = quantity + ?`,
+        [userId, productId, quantity, quantity]
       );
-      db.run(
+
+      // Record purchase
+      await connection.execute(
         `INSERT INTO purchases (user_id, product_id, price, quantity) VALUES (?, ?, ?, ?)`,
         [userId, productId, product.price, quantity]
       );
-      db.run('COMMIT', async commitErr => {
-        if (commitErr) {
-          db.run('ROLLBACK');
-          return res.status(500).json({ error: '购买失败' });
-        }
-        try {
-          await statsModel.recordAction(userId, 'purchase');
-        } catch (e) {
-          console.error('Failed to record stats:', e);
-        }
-        res.json({
-          success: true,
-          product,
-          cost: totalCost,
-          message: `购买成功！获得${product.name}`
-        });
-      });
+
+      await connection.commit();
+    } catch (transErr) {
+      await connection.rollback();
+      throw transErr;
+    } finally {
+      connection.release();
+    }
+
+    try {
+      await statsModel.recordAction(userId, 'purchase');
+    } catch (e) {
+      console.error('Failed to record stats:', e);
+    }
+
+    res.json({
+      success: true,
+      product,
+      cost: totalCost,
+      message: `购买成功！获得${product.name}`
     });
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '购买失败' });
+  }
 });
 
 // 获取背包
-router.get('/inventory', (req, res) => {
+router.get('/inventory', async (req, res) => {
   const { userId } = req.query;
   if (!userId) {
     return res.status(400).json({ error: '缺少 userId' });
   }
-  db.all(
-    `SELECT product_id, quantity FROM user_inventory WHERE user_id = ? AND quantity > 0`,
-    [userId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: '获取背包失败' });
-      const items = (rows || []).map(row => {
-        const product = findProduct(row.product_id);
-        return product ? { ...product, quantity: row.quantity } : null;
-      }).filter(Boolean);
-      res.json(items);
-    }
-  );
+  try {
+    const rows = await db.all(
+      `SELECT product_id, quantity FROM user_inventory WHERE user_id = ? AND quantity > 0`,
+      [userId]
+    );
+    const items = (rows || []).map(row => {
+      const product = findProduct(row.product_id);
+      return product ? { ...product, quantity: row.quantity } : null;
+    }).filter(Boolean);
+    res.json(items);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '获取背包失败' });
+  }
 });
 
 // 使用物品
-router.post('/use', (req, res) => {
+router.post('/use', async (req, res) => {
   const { userId, productId, petId } = req.body;
   if (!userId || !productId || !petId) {
     return res.status(400).json({ error: '缺少参数' });
@@ -153,62 +171,73 @@ router.post('/use', (req, res) => {
     return res.status(404).json({ error: '商品不存在' });
   }
 
-  db.get(`SELECT quantity FROM user_inventory WHERE user_id = ? AND product_id = ?`, [userId, productId], (err, inv) => {
-    if (err) return res.status(500).json({ error: '使用失败' });
+  try {
+    const inv = await db.get(`SELECT quantity FROM user_inventory WHERE user_id = ? AND product_id = ?`, [userId, productId]);
     if (!inv || inv.quantity <= 0) {
       return res.status(400).json({ error: '背包数量不足' });
     }
 
-    db.get(`SELECT * FROM pets WHERE id = ? AND user_id = ?`, [petId, userId], (petErr, pet) => {
-      if (petErr || !pet) {
-        return res.status(404).json({ error: '宠物不存在' });
-      }
+    const pet = await db.get(`SELECT * FROM pets WHERE id = ? AND user_id = ?`, [petId, userId]);
+    if (!pet) {
+      return res.status(404).json({ error: '宠物不存在' });
+    }
 
-      const effects = product.effectStats || {};
-      const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
-      let hunger = pet.hunger;
-      let happiness = pet.happiness;
-      let energy = pet.energy || 100;
-      let experience = pet.experience;
-      let level = pet.level;
+    const effects = product.effectStats || {};
+    const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+    let hunger = pet.hunger;
+    let happiness = pet.happiness;
+    let energy = pet.energy || 100;
+    let experience = pet.experience;
+    let level = pet.level;
 
-      if (effects.hunger) hunger = clamp(hunger + effects.hunger, 0, 100);
-      if (effects.happiness) happiness = clamp(happiness + effects.happiness, 0, 100);
-      if (effects.energy) energy = clamp(energy + effects.energy, 0, 100);
-      if (effects.experience) experience += effects.experience;
-      if (effects.level) level += effects.level;
+    if (effects.hunger) hunger = clamp(hunger + effects.hunger, 0, 100);
+    if (effects.happiness) happiness = clamp(happiness + effects.happiness, 0, 100);
+    if (effects.energy) energy = clamp(energy + effects.energy, 0, 100);
+    if (effects.experience) experience += effects.experience;
+    if (effects.level) level += effects.level;
 
-      const expNeeded = level * 100;
-      if (experience >= expNeeded) {
-        level += 1;
-        experience = experience - expNeeded;
-      }
+    const expNeeded = level * 100;
+    if (experience >= expNeeded) {
+      level += 1;
+      experience = experience - expNeeded;
+    }
 
-      db.serialize(() => {
-        db.run('BEGIN TRANSACTION');
-        db.run(
-          `UPDATE user_inventory SET quantity = quantity - 1 WHERE user_id = ? AND product_id = ?`,
-          [userId, productId]
-        );
-        db.run(
-          `UPDATE pets SET hunger = ?, happiness = ?, energy = ?, experience = ?, level = ?, updated_at = datetime('now') WHERE id = ?`,
-          [hunger, happiness, energy, experience, level, petId]
-        );
-        db.run('COMMIT', commitErr => {
-          if (commitErr) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: '使用失败' });
-          }
-          res.json({
-            success: true,
-            product,
-            pet: { ...pet, hunger, happiness, energy, experience, level },
-            message: `使用成功：${product.name}`
-          });
-        });
-      });
+    // Start transaction
+    const pool = db.getPool();
+    const connection = await pool.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Deduct item
+      await connection.execute(
+        `UPDATE user_inventory SET quantity = quantity - 1 WHERE user_id = ? AND product_id = ?`,
+        [userId, productId]
+      );
+
+      // Update pet
+      await connection.execute(
+        `UPDATE pets SET hunger = ?, happiness = ?, energy = ?, experience = ?, level = ?, updated_at = NOW() WHERE id = ?`,
+        [hunger, happiness, energy, experience, level, petId]
+      );
+
+      await connection.commit();
+    } catch (transErr) {
+      await connection.rollback();
+      throw transErr;
+    } finally {
+      connection.release();
+    }
+
+    res.json({
+      success: true,
+      product,
+      pet: { ...pet, hunger, happiness, energy, experience, level },
+      message: `使用成功：${product.name}`
     });
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: '使用失败' });
+  }
 });
 
 module.exports = router;

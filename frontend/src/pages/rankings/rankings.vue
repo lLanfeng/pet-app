@@ -64,6 +64,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 const rankingTypes = [
   { id: 'level', name: '等级', icon: '⭐' },
@@ -89,49 +90,51 @@ const rankings = ref([
 const switchType = (typeId: string) => {
   activeType.value = typeId
 }
-
-import { useAuthStore } from '@/stores/auth'
 </script>
 
 <style scoped>
 .rankings-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .rankings-header {
-  background: #fff;
-  padding: 20px;
+  background: var(--primary);
+  padding: 50px 16px 20px;
   text-align: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .rankings-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
+/* 类型切换 */
 .ranking-types {
   display: flex;
   padding: 12px 16px;
   gap: 8px;
   overflow-x: auto;
-  background: #fff;
+  background: var(--bg-card);
+  margin: 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .ranking-type {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
-  background: #f1f5f9;
-  border-radius: 8px;
+  padding: 8px 14px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   white-space: nowrap;
 }
 
 .ranking-type.active {
-  background: #22c55e;
-  color: #fff;
+  background: var(--primary);
 }
 
 .type-icon {
@@ -140,28 +143,29 @@ import { useAuthStore } from '@/stores/auth'
 }
 
 .type-name {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
 }
 
+/* 我的排名 */
 .my-ranking {
-  padding: 12px 16px;
+  padding: 0 16px 12px;
 }
 
 .my-rank-card {
-  background: #fff;
+  background: var(--bg-card);
   padding: 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .rank-badge {
   width: 44px;
   height: 44px;
-  background: #fef3c7;
-  border-radius: 10px;
+  background: #FEF3C7;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +173,7 @@ import { useAuthStore } from '@/stores/auth'
 }
 
 .rank-number {
-  color: #92400e;
+  color: #D97706;
   font-size: 14px;
   font-weight: 600;
 }
@@ -181,50 +185,52 @@ import { useAuthStore } from '@/stores/auth'
 .my-name {
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 2px;
 }
 
 .my-score {
   font-size: 13px;
-  color: #64748b;
+  color: var(--accent);
+  font-weight: 500;
 }
 
+/* 列表 */
 .rankings-list {
-  height: calc(100vh - 280px);
   padding: 0 16px;
 }
 
 .ranking-item {
   display: flex;
   align-items: center;
-  background: #fff;
-  margin-bottom: 8px;
+  background: var(--bg-card);
+  margin-bottom: 10px;
   padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .ranking-item.top-three {
-  background: #fefce8;
+  background: #FEFCE8;
+  border-color: #FCD34D;
 }
 
 .rank-position {
   width: 36px;
   display: flex;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .medal {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 .rank-num {
   font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .pet-info {
@@ -234,7 +240,7 @@ import { useAuthStore } from '@/stores/auth'
 }
 
 .pet-emoji {
-  font-size: 28px;
+  font-size: 32px;
   margin-right: 10px;
 }
 
@@ -245,14 +251,14 @@ import { useAuthStore } from '@/stores/auth'
 .pet-name {
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 2px;
 }
 
 .pet-owner {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .pet-stats {
@@ -262,12 +268,12 @@ import { useAuthStore } from '@/stores/auth'
 .pet-level {
   font-size: 12px;
   font-weight: 600;
-  color: #22c55e;
+  color: var(--primary);
   display: block;
 }
 
 .pet-score {
   font-size: 11px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 </style>

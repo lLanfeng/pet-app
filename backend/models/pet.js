@@ -1,26 +1,24 @@
 const db = require('../db');
 const statsModel = require('./stats');
 
-function createPet(userId, name, type, callback) {
-  const sql = `INSERT INTO pets (user_id, name, type, level, experience, hunger, happiness, energy, created_at, updated_at) 
-               VALUES (?,?,?,1,0,50,50,100,datetime('now'),datetime('now'))`;
-  db.run(sql, [userId, name, type], function(err) {
-    callback(err, this && this.lastID);
-  });
+async function createPet(userId, name, type) {
+  const sql = `INSERT INTO pets (user_id, name, type, level, experience, hunger, happiness, energy) VALUES (?,?,?,1,0,50,50,100)`;
+  const result = await db.run(sql, [userId, name, type]);
+  return result.insertId;
 }
 
-function listPetsByUser(userId, callback) {
-  db.all(`SELECT * FROM pets WHERE user_id = ? ORDER BY created_at DESC`, [userId], callback);
+async function listPetsByUser(userId) {
+  return await db.all(`SELECT * FROM pets WHERE user_id = ? ORDER BY created_at DESC`, [userId]);
 }
 
-function getPetById(id, callback) {
-  db.get(`SELECT * FROM pets WHERE id = ?`, [id], callback);
+async function getPetById(id) {
+  return await db.get(`SELECT * FROM pets WHERE id = ?`, [id]);
 }
 
-function updatePet(id, data, callback) {
+async function updatePet(id, data) {
   const fields = [];
   const values = [];
-  
+
   if (data.name !== undefined) {
     fields.push('name = ?');
     values.push(data.name);
@@ -45,85 +43,80 @@ function updatePet(id, data, callback) {
     fields.push('energy = ?');
     values.push(Math.max(0, Math.min(100, data.energy)));
   }
-  
+
   if (fields.length === 0) {
-    return callback(null, 0);
+    return 0;
   }
-  
-  fields.push('updated_at = datetime("now")');
+
+  fields.push('updated_at = NOW()');
   values.push(id);
-  
-  db.run(`UPDATE pets SET ${fields.join(', ')} WHERE id = ?`, values, function(err) {
-    callback(err, this && this.changes);
-  });
+
+  const result = await db.run(`UPDATE pets SET ${fields.join(', ')} WHERE id = ?`, values);
+  return result.affectedRows;
 }
 
 // 宠物互动操作
-function petAction(id, action, callback) {
-  getPetById(id, (err, pet) => {
-    if (err || !pet) {
-      return callback(err || new Error('宠物不存在'));
-    }
-    
-    let updateData = { ...pet };
-    let expGain = 0;
-    
-    switch(action) {
-      case 'feed':
-        updateData.hunger = Math.min(100, pet.hunger + 25);
-        expGain = 5;
-        break;
-      case 'play':
-        updateData.happiness = Math.min(100, pet.happiness + 15);
-        updateData.energy = Math.max(0, pet.energy - 5);
-        expGain = 8;
-        break;
-      case 'train':
-        updateData.experience = pet.experience + 15;
-        updateData.energy = Math.max(0, pet.energy - 10);
-        expGain = 15;
-        break;
-      case 'clean':
-        updateData.happiness = Math.min(100, pet.happiness + 10);
-        expGain = 3;
-        break;
-      default:
-        return callback(new Error('无效的操作'));
-    }
-    
-    // 检查升级
-    const expNeeded = pet.level * 100;
-    if (updateData.experience >= expNeeded) {
-      updateData.level = pet.level + 1;
-      updateData.experience = updateData.experience - expNeeded;
-    }
-    
-    updatePet(id, updateData, async (err, changes) => {
-      if (err) return callback(err);
-      try {
-        await statsModel.recordAction(pet.user_id, action);
-      } catch (e) {
-        console.error('Failed to record stats:', e);
-      }
-      callback(null, { 
-        success: true, 
-        pet: { ...pet, ...updateData },
-        expGain,
-        leveledUp: updateData.level > pet.level
-      });
-    });
-  });
+async function petAction(id, action) {
+  const pet = await getPetById(id);
+  if (!pet) {
+    throw new Error('宠物不存在');
+  }
+
+  let updateData = { ...pet };
+  let expGain = 0;
+
+  switch(action) {
+    case 'feed':
+      updateData.hunger = Math.min(100, pet.hunger + 25);
+      expGain = 5;
+      break;
+    case 'play':
+      updateData.happiness = Math.min(100, pet.happiness + 15);
+      updateData.energy = Math.max(0, pet.energy - 5);
+      expGain = 8;
+      break;
+    case 'train':
+      updateData.experience = pet.experience + 15;
+      updateData.energy = Math.max(0, pet.energy - 10);
+      expGain = 15;
+      break;
+    case 'clean':
+      updateData.happiness = Math.min(100, pet.happiness + 10);
+      expGain = 3;
+      break;
+    default:
+      throw new Error('无效的操作');
+  }
+
+  // 检查升级
+  const expNeeded = pet.level * 100;
+  if (updateData.experience >= expNeeded) {
+    updateData.level = pet.level + 1;
+    updateData.experience = updateData.experience - expNeeded;
+  }
+
+  await updatePet(id, updateData);
+  try {
+    await statsModel.recordAction(pet.user_id, action);
+  } catch (e) {
+    console.error('Failed to record stats:', e);
+  }
+
+  return {
+    success: true,
+    pet: { ...pet, ...updateData },
+    expGain,
+    leveledUp: updateData.level > pet.level
+  };
 }
 
-function deletePet(id, callback) {
-  const sql = `DELETE FROM pets WHERE id = ?`;
-  db.run(sql, [id], function(err) {
-    callback(err, this && this.changes);
-  });
+async function deletePet(id) {
+  const result = await db.run(`DELETE FROM pets WHERE id = ?`, [id]);
+  return result.affectedRows;
 }
 
 // 获取宠物类型列表
-function getPetTypes(callback) {
+function getPetTypes() {
   const types = [
     { id: 'dog', name: '狗狗', emoji: '🐶', baseExp: 100 },
     { id: 'cat', name: '猫咪', emoji: '🐱', baseExp: 100 },
@@ -132,7 +125,7 @@ function getPetTypes(callback) {
     { id: 'parrot', name: '鹦鹉', emoji: '🦜', baseExp: 90 },
     { id: 'fish', name: '金鱼', emoji: '🐠', baseExp: 70 }
   ];
-  callback(null, types);
+  return types;
 }
 
 module.exports = {

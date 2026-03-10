@@ -111,11 +111,11 @@ const goRegister = () => router.push('/register');
 <style scoped>
 .login-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 60px 24px 32px;
+  padding: 60px 20px 24px;
 }
 
 .login-main {
@@ -124,14 +124,14 @@ const goRegister = () => router.push('/register');
 
 .login-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .logo-box {
-  width: 64px;
-  height: 64px;
-  background: #f1f5f9;
-  border-radius: 16px;
+  width: 72px;
+  height: 72px;
+  background: var(--primary);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,19 +139,19 @@ const goRegister = () => router.push('/register');
 }
 
 .logo {
-  font-size: 32px;
+  font-size: 36px;
 }
 
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .login-form {
@@ -163,22 +163,23 @@ const goRegister = () => router.push('/register');
 .input-wrap .input {
   width: 100%;
   padding: 14px 16px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  font-size: 15px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
   box-sizing: border-box;
 }
 
 .input-wrap .input:focus {
   outline: none;
-  border-color: #22c55e;
+  border-color: var(--primary);
 }
 
 .form-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 4px;
 }
 
 .remember {
@@ -186,61 +187,64 @@ const goRegister = () => router.push('/register');
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .remember input {
   width: 16px;
   height: 16px;
-  accent-color: #22c55e;
+  accent-color: var(--primary);
 }
 
 .forgot {
   font-size: 13px;
-  color: #22c55e;
+  font-weight: 500;
+  color: var(--primary);
 }
 
 .login-btn {
   width: 100%;
   padding: 14px;
-  background: #22c55e;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 500;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
 .demo-btn {
   width: 100%;
   padding: 14px;
-  background: #fff;
-  color: #1e293b;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .register {
   text-align: center;
-  margin-top: 24px;
+  margin-top: 20px;
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .register span {
-  color: #22c55e;
+  color: var(--primary);
+  font-weight: 500;
 }
 
 .agreement {
   text-align: center;
-  font-size: 12px;
-  color: #94a3b8;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .agreement span {
-  color: #22c55e;
-  margin: 0 4px;
+  color: var(--primary);
+  margin: 0 2px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <view class="tasks-container">
-    <!--    <view class 任务头部 -->
-="tasks-header">
+    <!-- 任务头部 -->
+    <view class="tasks-header">
       <view class="header-content">
         <text class="tasks-title">每日任务</text>
         <text class="tasks-subtitle">完成任务获得奖励</text>
@@ -117,89 +117,97 @@ onMounted(() => {
 <style scoped>
 .tasks-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .tasks-header {
-  background: #fff;
-  padding: 20px;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--primary);
+  padding: 50px 16px 20px;
+}
+
+.header-content {
+  display: block;
 }
 
 .tasks-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
   display: block;
   margin-bottom: 4px;
 }
 
 .tasks-subtitle {
   font-size: 13px;
-  color: #64748b;
+  color: rgba(255, 255, 255, 0.85);
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .progress-bar {
   width: 100%;
   height: 8px;
-  background: #e2e8f0;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-full);
   position: relative;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #22c55e;
-  border-radius: 4px;
+  background: #fff;
+  border-radius: var(--radius-full);
   transition: width 0.3s;
 }
 
 .progress-text {
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  right: 8px;
+  transform: translateY(-50%);
   font-size: 10px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
+/* 列表 */
 .tasks-list {
-  height: calc(100vh - 220px);
   padding: 12px 16px;
 }
 
 .task-card {
-  background: #fff;
-  border-radius: 10px;
-  padding: 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 14px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .task-card.completed {
-  background: #f0fdf4;
-  border-color: #bbf7d0;
+  border-color: var(--success);
 }
 
 .task-icon {
-  width: 40px;
-  height: 40px;
-  background: #f1f5f9;
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 12px;
 }
 
+.task-card.completed .task-icon {
+  background: #D1FAE5;
+}
+
 .icon-emoji {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .task-content {
@@ -208,8 +216,8 @@ onMounted(() => {
 
 .task-title {
   font-size: 14px;
-  font-weight: 600;
-  color: #1e293b;
+  font-weight: 500;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 6px;
 }
@@ -222,10 +230,21 @@ onMounted(() => {
 
 .progress-bg {
   flex: 1;
-  height: 4px;
-  background: #e2e8f0;
-  border-radius: 2px;
+  height: 6px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   overflow: hidden;
+}
+
+.task-progress .progress-fill {
+  background: var(--primary);
+}
+
+.task-progress .progress-text {
+  position: static;
+  transform: none;
+  font-size: 11px;
+  color: var(--text-muted);
 }
 
 .task-reward {
@@ -233,56 +252,57 @@ onMounted(() => {
 }
 
 .reward-amount {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: #f59e0b;
+  color: var(--accent);
 }
 
 .task-action {
-  min-width: 60px;
+  min-width: 64px;
 }
 
 .action-btn {
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 11px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
   font-weight: 500;
   border: none;
 }
 
 .action-btn.disabled {
-  background: #e2e8f0;
-  color: #94a3b8;
+  background: var(--bg-gray);
+  color: var(--text-muted);
 }
 
 .action-btn.claim {
-  background: #22c55e;
+  background: var(--primary);
   color: #fff;
 }
 
 .action-btn.claimed {
-  background: #bbf7d0;
-  color: #16a34a;
+  background: #D1FAE5;
+  color: var(--primary-dark);
 }
 
+/* 提示 */
 .task-tips {
-  padding: 16px;
-  background: #fff;
-  margin: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  margin: 0 16px;
+  padding: 14px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
 .tips-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .tips-content {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 </style>

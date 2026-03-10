@@ -112,48 +112,49 @@ onMounted(() => {
 <style scoped>
 .settings-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .settings-header {
-  background: #fff;
-  padding: 20px;
+  background: var(--primary);
+  padding: 50px 16px 20px;
   text-align: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .settings-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
+/* 列表 */
 .settings-list {
-  height: calc(100vh - 60px);
   padding: 12px 16px;
 }
 
 .settings-section {
-  background: #fff;
-  border-radius: 10px;
-  margin-bottom: 12px;
-  padding: 12px 16px;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
 }
 
 .section-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: #64748b;
+  color: var(--text-muted);
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .setting-item {
   display: flex;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .setting-item:last-child {
@@ -165,19 +166,20 @@ onMounted(() => {
 }
 
 .setting-name {
-  font-size: 15px;
-  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
   display: block;
 }
 
 .setting-desc {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-top: 2px;
 }
 
 .arrow {
-  font-size: 18px;
-  color: #cbd5e1;
+  font-size: 16px;
+  color: var(--text-muted);
 }
 </style>

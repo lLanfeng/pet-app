@@ -1,21 +1,5 @@
 const db = require('../db');
 
-const run = (sql, params = []) =>
-  new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (err) return reject(err);
-      resolve(this);
-    });
-  });
-
-const get = (sql, params = []) =>
-  new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) return reject(err);
-      resolve(row);
-    });
-  });
-
 const todayStr = () => {
   const d = new Date();
   const y = d.getFullYear();
@@ -25,31 +9,39 @@ const todayStr = () => {
 };
 
 const ensureStatsRow = async userId => {
-  await run(
-    `INSERT OR IGNORE INTO user_stats (user_id) VALUES (?)`,
-    [userId]
-  );
+  try {
+    await db.run(
+      `INSERT IGNORE INTO user_stats (user_id) VALUES (?)`,
+      [userId]
+    );
+  } catch (err) {
+    // Ignore duplicate key errors
+  }
 };
 
 const ensureDailyRow = async (userId, date) => {
-  await run(
-    `INSERT OR IGNORE INTO user_daily_stats (user_id, date) VALUES (?, ?)`,
-    [userId, date]
-  );
+  try {
+    await db.run(
+      `INSERT IGNORE INTO user_daily_stats (user_id, date) VALUES (?, ?)`,
+      [userId, date]
+    );
+  } catch (err) {
+    // Ignore duplicate key errors
+  }
 };
 
 const incrementStat = async (userId, field, amount = 1) => {
   await ensureStatsRow(userId);
-  await run(
-    `UPDATE user_stats SET ${field} = ${field} + ?, updated_at = datetime('now') WHERE user_id = ?`,
+  await db.run(
+    `UPDATE user_stats SET ${field} = ${field} + ?, updated_at = NOW() WHERE user_id = ?`,
     [amount, userId]
   );
 };
 
 const incrementDailyStat = async (userId, field, amount = 1, date = todayStr()) => {
   await ensureDailyRow(userId, date);
-  await run(
-    `UPDATE user_daily_stats SET ${field} = ${field} + ?, updated_at = datetime('now') WHERE user_id = ? AND date = ?`,
+  await db.run(
+    `UPDATE user_daily_stats SET ${field} = ${field} + ?, updated_at = NOW() WHERE user_id = ? AND date = ?`,
     [amount, userId, date]
   );
 };
@@ -77,12 +69,12 @@ const recordAction = async (userId, type) => {
 
 const getStats = async userId => {
   await ensureStatsRow(userId);
-  return get(`SELECT * FROM user_stats WHERE user_id = ?`, [userId]);
+  return await db.get(`SELECT * FROM user_stats WHERE user_id = ?`, [userId]);
 };
 
 const getDailyStats = async (userId, date = todayStr()) => {
   await ensureDailyRow(userId, date);
-  return get(`SELECT * FROM user_daily_stats WHERE user_id = ? AND date = ?`, [userId, date]);
+  return await db.get(`SELECT * FROM user_daily_stats WHERE user_id = ? AND date = ?`, [userId, date]);
 };
 
 module.exports = {

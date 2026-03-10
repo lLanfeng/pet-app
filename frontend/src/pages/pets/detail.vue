@@ -13,9 +13,9 @@
     </view>
 
     <!-- 经验 -->
-    <view class="exp-card">
+    <view class="detail-card">
       <view class="exp-row">
-        <text class="exp-label">经验</text>
+        <text class="exp-label">经验值</text>
         <text class="exp-value">{{ experience }}/{{ expNeed }}</text>
       </view>
       <view class="exp-bar">
@@ -24,12 +24,12 @@
     </view>
 
     <!-- 属性 -->
-    <view class="stat-card">
+    <view class="detail-card">
       <view class="stat-item">
         <text class="stat-icon">🍖</text>
         <text class="stat-name">饱食</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: hunger + '%', background: '#22c55e'}"></view>
+          <view class="stat-fill" :style="{width: hunger + '%', background: '#10B981'}"></view>
         </view>
         <text class="stat-num">{{ hunger }}%</text>
       </view>
@@ -37,7 +37,7 @@
         <text class="stat-icon">😊</text>
         <text class="stat-name">快乐</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: happiness + '%', background: '#f59e0b'}"></view>
+          <view class="stat-fill" :style="{width: happiness + '%', background: '#F59E0B'}"></view>
         </view>
         <text class="stat-num">{{ happiness }}%</text>
       </view>
@@ -45,15 +45,15 @@
         <text class="stat-icon">⚡</text>
         <text class="stat-name">活力</text>
         <view class="stat-bar">
-          <view class="stat-fill" :style="{width: energy + '%', background: '#3b82f6'}"></view>
+          <view class="stat-fill" :style="{width: energy + '%', background: '#3B82F6'}"></view>
         </view>
         <text class="stat-num">{{ energy }}%</text>
       </view>
     </view>
 
     <!-- 互动 -->
-    <view class="action-card">
-      <view class="action-title">互动</view>
+    <view class="detail-card">
+      <text class="card-title">互动</text>
       <view class="action-grid">
         <view class="action-btn" @click="action('feed')">
           <text class="action-icon">🍖</text>
@@ -75,8 +75,8 @@
     </view>
 
     <!-- 记录 -->
-    <view class="record-card">
-      <view class="record-title">记录</view>
+    <view class="detail-card">
+      <text class="card-title">记录</text>
       <view class="record-list">
         <view class="record-item" v-for="(r, i) in records" :key="i">
           <text class="record-icon">{{ r.icon }}</text>
@@ -93,9 +93,16 @@
   </view>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+import { petAPI } from '@/services/api';
 
+const route = useRoute();
+const authStore = useAuthStore();
+
+const petId = ref(Number(route.query.id) || 0);
 const petEmoji = ref('🐶');
 const petName = ref('小球球');
 const petType = ref('狗狗');
@@ -114,71 +121,117 @@ const records = ref([
   { icon: '⭐', text: '升级到Lv.8', time: '昨天' }
 ]);
 
-const action = (type) => {
-  switch(type) {
-    case 'feed':
-      hunger.value = Math.min(100, hunger.value + 25);
-      uni.showToast({ title: '喂食成功 +25', icon: 'none' });
-      break;
-    case 'play':
-      happiness.value = Math.min(100, happiness.value + 15);
-      uni.showToast({ title: '玩耍愉快 +15', icon: 'none' });
-      break;
-    case 'train':
-      experience.value += 15;
-      if (experience.value >= expNeed.value) {
-        petLevel.value++;
-        experience.value = 0;
-        uni.showToast({ title: '升级了！', icon: 'none' });
-      } else {
-        uni.showToast({ title: '训练完成 +15经验', icon: 'none' });
-      }
-      break;
-    case 'clean':
-      happiness.value = Math.min(100, happiness.value + 10);
-      uni.showToast({ title: '清洁完成 +10', icon: 'none' });
-      break;
+const emojiMap: Record<string, string> = { dog: '🐶', cat: '🐱', rabbit: '🐰', hamster: '🐹', parrot: '🦜', fish: '🐠' };
+const typeMap: Record<string, string> = { dog: '狗狗', cat: '猫咪', rabbit: '兔子', hamster: '仓鼠', parrot: '鹦鹉', fish: '鱼' };
+
+const loadPet = async () => {
+  if (!petId.value) return;
+  try {
+    const pet = await petAPI.getPetById(petId.value);
+    petName.value = pet.name;
+    petEmoji.value = emojiMap[pet.type] || '🐾';
+    petType.value = typeMap[pet.type] || pet.type;
+    petLevel.value = pet.level;
+    experience.value = pet.experience;
+    hunger.value = pet.hunger;
+    happiness.value = pet.happiness;
+    energy.value = pet.energy || 100;
+  } catch (err) {
+    console.error('加载宠物失败:', err);
   }
 };
 
-const remove = () => {
+const action = async (type: string) => {
+  if (!petId.value) {
+    switch(type) {
+      case 'feed':
+        hunger.value = Math.min(100, hunger.value + 25);
+        uni.showToast({ title: '喂食成功 +25', icon: 'none' });
+        break;
+      case 'play':
+        happiness.value = Math.min(100, happiness.value + 15);
+        uni.showToast({ title: '玩耍愉快 +15', icon: 'none' });
+        break;
+      case 'train':
+        experience.value += 15;
+        if (experience.value >= expNeed.value) {
+          petLevel.value++;
+          experience.value = 0;
+          uni.showToast({ title: '升级了！', icon: 'none' });
+        } else {
+          uni.showToast({ title: '训练完成 +15经验', icon: 'none' });
+        }
+        break;
+      case 'clean':
+        happiness.value = Math.min(100, happiness.value + 10);
+        uni.showToast({ title: '清洁完成 +10', icon: 'none' });
+        break;
+    }
+    return;
+  }
+
+  try {
+    const res = await petAPI.action(petId.value, type);
+    if (res.success) {
+      hunger.value = res.pet.hunger;
+      happiness.value = res.pet.happiness;
+      experience.value = res.pet.experience;
+      petLevel.value = res.pet.level;
+      uni.showToast({ title: res.message || '操作成功', icon: 'none' });
+    }
+  } catch (err: any) {
+    uni.showToast({ title: err?.error || '操作失败', icon: 'error' });
+  }
+};
+
+const remove = async () => {
   uni.showModal({
     title: '提示',
     content: '确定删除 ' + petName.value + ' 吗？',
-    success: (res) => {
-      if (res.confirm) {
-        uni.showToast({ title: '已删除', icon: 'none' });
-        setTimeout(() => uni.navigateBack(), 1000);
+    success: async (res: any) => {
+      if (res.confirm && petId.value) {
+        try {
+          await petAPI.deletePet(petId.value);
+          uni.showToast({ title: '已删除', icon: 'none' });
+          setTimeout(() => uni.navigateBack(), 1000);
+        } catch (err) {
+          uni.showToast({ title: '删除失败', icon: 'error' });
+        }
       }
     }
   });
 };
+
+onMounted(() => {
+  loadPet();
+});
 </script>
 
 <style scoped>
 .detail-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .detail-header {
-  background: #fff;
-  padding: 48px 16px 20px;
+  background: var(--primary);
+  padding: 50px 16px 20px;
   display: flex;
   align-items: center;
   gap: 14px;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .pet-avatar {
-  width: 72px;
-  height: 72px;
-  background: #f1f5f9;
-  border-radius: 16px;
+  width: 64px;
+  height: 64px;
+  background: rgba(255,255,255,0.25);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 40px;
+  font-size: 36px;
 }
 
 .pet-info {
@@ -186,9 +239,9 @@ const remove = () => {
 }
 
 .pet-name {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
   display: block;
   margin-bottom: 6px;
 }
@@ -199,21 +252,31 @@ const remove = () => {
 }
 
 .pet-tag {
-  font-size: 12px;
+  font-size: 11px;
   padding: 4px 8px;
-  background: #f1f5f9;
-  border-radius: 6px;
-  color: #475569;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--radius-full);
+  color: #fff;
 }
 
-.exp-card {
-  background: #fff;
-  margin: 12px 16px;
+/* 通用卡片 */
+.detail-card {
+  background: var(--bg-card);
+  margin: 12px 16px 0;
   padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
 }
 
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* 经验 */
 .exp-row {
   display: flex;
   justify-content: space-between;
@@ -222,36 +285,29 @@ const remove = () => {
 
 .exp-label {
   font-size: 13px;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 .exp-value {
   font-size: 13px;
-  color: #22c55e;
+  color: var(--primary);
   font-weight: 500;
 }
 
 .exp-bar {
-  height: 6px;
-  background: #e2e8f0;
-  border-radius: 3px;
+  height: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .exp-fill {
   height: 100%;
-  background: #22c55e;
-  border-radius: 3px;
+  background: var(--primary);
+  border-radius: var(--radius-full);
 }
 
-.stat-card {
-  background: #fff;
-  margin: 0 16px 12px;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-}
-
+/* 属性 */
 .stat-item {
   display: flex;
   align-items: center;
@@ -270,46 +326,32 @@ const remove = () => {
 
 .stat-name {
   font-size: 13px;
-  color: #475569;
-  width: 40px;
+  color: var(--text-secondary);
+  width: 36px;
 }
 
 .stat-bar {
   flex: 1;
-  height: 6px;
-  background: #e2e8f0;
-  border-radius: 3px;
+  height: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-full);
   overflow: hidden;
   margin: 0 10px;
 }
 
 .stat-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: var(--radius-full);
 }
 
 .stat-num {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
   width: 40px;
   text-align: right;
 }
 
-.action-card {
-  background: #fff;
-  margin: 0 16px 12px;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-}
-
-.action-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 12px;
-}
-
+/* 互动 */
 .action-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -321,8 +363,8 @@ const remove = () => {
   flex-direction: column;
   align-items: center;
   padding: 12px 6px;
-  background: #f8fafc;
-  border-radius: 8px;
+  background: var(--bg-gray);
+  border-radius: var(--radius-md);
 }
 
 .action-icon {
@@ -332,24 +374,10 @@ const remove = () => {
 
 .action-name {
   font-size: 11px;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
-.record-card {
-  background: #fff;
-  margin: 0 16px 12px;
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid #e2e8f0;
-}
-
-.record-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #1e293b;
-  margin-bottom: 10px;
-}
-
+/* 记录 */
 .record-list {
   display: flex;
   flex-direction: column;
@@ -358,8 +386,8 @@ const remove = () => {
 .record-item {
   display: flex;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .record-item:last-child {
@@ -374,22 +402,23 @@ const remove = () => {
 .record-text {
   flex: 1;
   font-size: 13px;
-  color: #334155;
+  color: var(--text-primary);
 }
 
 .record-time {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
+/* 删除按钮 */
 .delete-btn {
-  background: #fff;
-  margin: 20px 16px 0;
+  background: var(--bg-card);
+  margin: 16px;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   text-align: center;
   font-size: 14px;
-  color: #ef4444;
-  border: 1px solid #ef4444;
+  color: var(--error);
+  border: 1px solid var(--error);
 }
 </style>

@@ -5,30 +5,21 @@
       <div class="user-section">
         <div class="avatar" @click="goToProfile">
           <span>{{ userAvatar }}</span>
-          <span class="level-tag">Lv.{{ userLevel }}</span>
         </div>
         <div class="user-info">
           <span class="greeting">{{ timeOfDay }}，{{ userNickname }}</span>
-          <span class="user-title">{{ userTitleText }}</span>
+          <span class="user-title">Lv.{{ userLevel }} · {{ userTitleText }}</span>
         </div>
       </div>
-
       <div class="header-right">
         <div class="coin-pill" @click="goToShop">
-          <span class="coin-icon">💰</span>
-          <span class="coin-value">{{ coins }}</span>
+          <span>💰</span>
+          <span>{{ coins }}</span>
         </div>
-        <div class="gem-pill" @click="goToShop">
-          <span class="gem-icon">💎</span>
-          <span class="gem-value">{{ gems }}</span>
+        <div class="sign-pill" :class="{ signed: todaySigned }" @click="handleSign">
+          <span>{{ todaySigned ? '✓' : '+' }}</span>
         </div>
       </div>
-    </div>
-
-    <!-- 签到 -->
-    <div class="sign-pill" :class="{ signed: todaySigned }" @click="handleSign">
-      <span v-if="!todaySigned" class="sign-plus">+</span>
-      <span class="sign-text">{{ todaySigned ? '已签到' : '签到' }}</span>
     </div>
 
     <!-- 横幅 -->
@@ -40,7 +31,7 @@
         :interval="4000"
         :duration="600"
         :circular="true"
-        indicator-color="rgba(255,255,255,0.4)"
+        indicator-color="rgba(255,255,255,0.5)"
         indicator-active-color="#fff"
       >
         <swiper-item v-for="item in banners" :key="item.id">
@@ -48,7 +39,6 @@
             <img :src="item.image" mode="aspectFill" class="banner-img" />
             <div class="banner-info">
               <span class="banner-title">{{ item.title }}</span>
-              <span class="banner-desc">{{ item.desc }}</span>
             </div>
           </div>
         </swiper-item>
@@ -63,7 +53,7 @@
       </div>
     </div>
 
-    <!-- 扭蛋 -->
+    <!-- 扭蛋卡片 -->
     <div class="gacha-card" @click="openGacha">
       <div class="gacha-left">
         <span class="gacha-icon">🎰</span>
@@ -79,39 +69,21 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">我的萌宠</span>
-        <span class="section-more" @click="goToPets">查看全部</span>
+        <span class="section-more" @click="goToPets">查看全部 ›</span>
       </div>
       <div class="pets-row">
         <div
           v-for="pet in myPets"
           :key="pet.id"
           class="pet-chip"
-          :style="{ background: pet.bgColor }"
           @click="goToPetDetail(pet.id)"
         >
           <span class="pet-emoji">{{ pet.emoji }}</span>
-          <div class="pet-meta">
-            <span class="pet-name">{{ pet.name }}</span>
-            <span class="pet-level">Lv.{{ pet.level }}</span>
-          </div>
-          <div class="pet-bars">
-            <div class="pet-bar-item">
-              <span class="bar-label">饱</span>
-              <div class="pet-bar">
-                <div class="pet-bar-fill" :style="{ width: pet.hunger + '%', background: '#22C55E' }"></div>
-              </div>
-            </div>
-            <div class="pet-bar-item">
-              <span class="bar-label">乐</span>
-              <div class="pet-bar">
-                <div class="pet-bar-fill" :style="{ width: pet.happiness + '%', background: '#F59E0B' }"></div>
-              </div>
-            </div>
-          </div>
+          <span class="pet-name">{{ pet.name }}</span>
+          <span class="pet-level">Lv.{{ pet.level }}</span>
         </div>
         <div class="pet-add" @click="goToAddPet">
           <span class="add-icon">+</span>
-          <span class="add-label">添加</span>
         </div>
       </div>
     </div>
@@ -120,7 +92,7 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">今日任务</span>
-        <span class="section-more" @click="goToTasks">更多</span>
+        <span class="section-more" @click="goToTasks">更多 ›</span>
       </div>
       <div class="task-card">
         <div class="task-header">
@@ -131,16 +103,13 @@
           <div class="progress-bar" :style="{ width: taskProgress + '%' }"></div>
         </div>
         <div class="task-list">
-          <div v-for="task in taskPreview" :key="task.id" class="task-item" :class="{ done: task.completed }">
+          <div v-for="task in taskPreview" :key="task.id" class="task-item">
             <span class="task-emoji">{{ task.emoji }}</span>
             <span class="task-name">{{ task.name }}</span>
-            <span class="task-status">{{ task.completed ? '✓' : `${task.current}/${task.target}` }}</span>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="bottom-fake"></div>
   </div>
 </template>
 
@@ -157,7 +126,6 @@ const userNickname = ref('主人');
 const userLevel = ref(1);
 const userAvatar = ref('👤');
 const coins = ref(0);
-const gems = ref(0);
 const todaySigned = ref(false);
 
 const timeOfDay = computed(() => {
@@ -167,24 +135,24 @@ const timeOfDay = computed(() => {
   return '晚上好';
 });
 
-const userTitles = ['萌新铲屎官', '初级达人', '中级达人', '高级达人', '资深达人', '宠物大师', '宠物之王'];
+const userTitles = ['萌新', '达人', '高手', '大师', '王者'];
 const userTitleText = computed(() => userTitles[Math.min(Math.floor(userLevel.value / 5), userTitles.length - 1)]);
 
 const banners = ref([
-  { id: 1, image: 'https://place.dog/750/320', title: '🐕 新宠物来袭', desc: '领养可爱小狗狗', link: '/pets' },
-  { id: 2, image: 'https://place.dog/750/321', title: '🎁 登录送好礼', desc: '连续签到得奖励', link: '/tasks' },
-  { id: 3, image: 'https://place.dog/750/322', title: '🛒 商店特惠', desc: '限时折扣等你', link: '/shop' },
+  { id: 1, image: 'https://place.dog/750/300', title: '新宠物来袭', link: '/pets' },
+  { id: 2, image: 'https://place.dog/750/301', title: '签到送好礼', link: '/tasks' },
+  { id: 3, image: 'https://place.dog/750/302', title: '商店特惠', link: '/shop' },
 ]);
 
 const quickActions = [
-  { icon: '🐾', label: '我的宠物', action: () => router.push('/pets') },
-  { icon: '🛒', label: '宠物商店', action: () => router.push('/shop') },
-  { icon: '📋', label: '每日任务', action: () => router.push('/tasks') },
-  { icon: '🏆', label: '排行榜', action: () => router.push('/rankings') },
+  { icon: '🐾', label: '宠物', action: () => router.push('/pets') },
+  { icon: '🛒', label: '商店', action: () => router.push('/shop') },
+  { icon: '📋', label: '任务', action: () => router.push('/tasks') },
+  { icon: '🏆', label: '排行', action: () => router.push('/rankings') },
   { icon: '💬', label: '社区', action: () => router.push('/community') },
   { icon: '🎖️', label: '成就', action: () => router.push('/achievements') },
-  { icon: '👥', label: '好友', action: () => uni.showToast({ title: '即将上线', icon: 'none' }) },
   { icon: '📮', label: '邮件', action: () => router.push('/mail') },
+  { icon: '👤', label: '我的', action: () => router.push('/profile') },
 ];
 
 const myPets = ref<any[]>([]);
@@ -226,7 +194,7 @@ const goToPetDetail = (id: number) => router.push(`/pets/detail?id=${id}`);
 
 const openGacha = () => {
   if (coins.value < 100) {
-    uni.showToast({ title: '金币不足', icon: 'error' });
+    uni.showToast({ title: '金币不足', icon: 'none' });
     return;
   }
   coins.value -= 100;
@@ -252,29 +220,23 @@ onMounted(() => {
       userLevel.value = info.level || 1;
       userAvatar.value = info.avatar || '👤';
       coins.value = info.coins || 0;
-      gems.value = info.diamonds || 0;
     } catch {
       if (authStore.userInfo) {
         userNickname.value = authStore.userInfo.nickname || '主人';
         userLevel.value = authStore.userInfo.level || 1;
         userAvatar.value = authStore.userInfo.avatar || '👤';
         coins.value = authStore.userInfo.coins || 0;
-        gems.value = authStore.userInfo.diamonds || 0;
       }
     }
 
     try {
       const pets = await petAPI.listPetsByUser(userId);
-      const colors = ['#F0FDF4', '#FEFCE8', '#FEF3C7', '#FDF4FF', '#F0F9FF'];
       const emojiMap: any = { dog: '🐶', cat: '🐱', rabbit: '🐰', hamster: '🐹', parrot: '🦜', fish: '🐠' };
-      myPets.value = (pets || []).slice(0, 4).map((p: any, idx: number) => ({
+      myPets.value = (pets || []).slice(0, 4).map((p: any) => ({
         id: p.id,
         name: p.name,
         emoji: emojiMap[p.type] || '🐾',
-        level: p.level,
-        hunger: p.hunger,
-        happiness: p.happiness,
-        bgColor: colors[idx % colors.length]
+        level: p.level
       }));
     } catch {
       myPets.value = [];
@@ -286,11 +248,8 @@ onMounted(() => {
       completedTasks.value = tasks.filter((t: any) => t.completed).length;
       taskPreview.value = tasks.slice(0, 4).map((t: any) => ({
         id: t.id,
-        name: t.title?.replace('宠物', '').replace('每日', '') || t.title,
-        emoji: t.emoji,
-        current: t.current,
-        target: t.target,
-        completed: t.completed
+        name: t.title?.substring(0, 4) || '任务',
+        emoji: t.emoji
       }));
     } catch {
       totalTasks.value = 0;
@@ -307,17 +266,16 @@ onMounted(() => {
 .home-container {
   background: var(--bg-page);
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 }
 
 /* Header */
 .header {
-  background: var(--bg-card);
-  padding: 52px 16px 16px;
+  background: var(--primary);
+  padding: 50px 16px 16px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  border-bottom: 1px solid var(--border);
+  align-items: center;
 }
 
 .user-section {
@@ -327,27 +285,14 @@ onMounted(() => {
 }
 
 .avatar {
-  position: relative;
-  width: 48px;
-  height: 48px;
-  background: var(--bg-muted);
-  border-radius: var(--radius-lg);
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.25);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
-}
-
-.level-tag {
-  position: absolute;
-  bottom: -4px;
-  right: -4px;
-  background: var(--primary);
-  color: #fff;
-  font-size: 9px;
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
 }
 
 .user-info {
@@ -356,73 +301,55 @@ onMounted(() => {
 }
 
 .greeting {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
 }
 
 .user-title {
   font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 2px;
+  color: rgba(255,255,255,0.8);
 }
 
 .header-right {
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.coin-pill,
-.gem-pill {
+.coin-pill {
   display: flex;
   align-items: center;
-  background: var(--bg-muted);
-  padding: 6px 10px;
-  border-radius: var(--radius-full);
   gap: 4px;
-}
-
-.coin-icon,
-.gem-icon {
-  font-size: 12px;
-}
-
-.coin-value,
-.gem-value {
-  font-size: 12px;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
 }
 
-/* Sign Pill */
 .sign-pill {
-  position: absolute;
-  right: 16px;
-  top: 58px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
-  gap: 2px;
-  background: var(--primary);
-  color: #fff;
-  padding: 5px 12px;
+  justify-content: center;
+  background: #fff;
   border-radius: var(--radius-full);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
 }
 
 .sign-pill.signed {
-  background: var(--bg-muted);
+  background: var(--bg-gray);
   color: var(--text-muted);
-}
-
-.sign-plus {
-  font-size: 14px;
-  font-weight: 600;
 }
 
 /* Banner */
 .banner-wrap {
-  padding: 16px;
+  padding: 12px 16px;
 }
 
 .banner {
@@ -438,7 +365,7 @@ onMounted(() => {
 
 .banner-img {
   width: 100%;
-  height: 160px;
+  height: 140px;
   object-fit: cover;
 }
 
@@ -447,7 +374,7 @@ onMounted(() => {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 32px 14px 14px;
+  padding: 24px 12px 12px;
   background: linear-gradient(transparent, rgba(0,0,0,0.6));
 }
 
@@ -455,12 +382,6 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 600;
   color: #fff;
-  display: block;
-}
-
-.banner-desc {
-  font-size: 12px;
-  color: rgba(255,255,255,0.8);
 }
 
 /* Quick Grid */
@@ -483,12 +404,12 @@ onMounted(() => {
 }
 
 .quick-icon {
-  font-size: 20px;
-  margin-bottom: 6px;
+  font-size: 22px;
+  margin-bottom: 4px;
 }
 
 .quick-label {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-secondary);
 }
 
@@ -497,11 +418,10 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-card);
+  background: linear-gradient(135deg, var(--accent-purple), #A78BFA);
   margin: 16px;
   padding: 14px;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
 }
 
 .gacha-left {
@@ -511,24 +431,24 @@ onMounted(() => {
 }
 
 .gacha-icon {
-  font-size: 26px;
+  font-size: 28px;
 }
 
 .gacha-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #fff;
   display: block;
 }
 
 .gacha-desc {
   font-size: 11px;
-  color: var(--text-muted);
+  color: rgba(255,255,255,0.8);
 }
 
 .gacha-arrow {
-  font-size: 20px;
-  color: var(--border);
+  font-size: 22px;
+  color: #fff;
 }
 
 /* Section */
@@ -551,7 +471,7 @@ onMounted(() => {
 }
 
 .section-more {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
 }
 
@@ -560,7 +480,6 @@ onMounted(() => {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 4px;
 }
 
 .pets-row::-webkit-scrollbar {
@@ -568,89 +487,45 @@ onMounted(() => {
 }
 
 .pet-chip {
-  min-width: 140px;
+  min-width: 90px;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border: 1px solid var(--border);
 }
 
 .pet-emoji {
-  font-size: 28px;
-  display: block;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-.pet-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  font-size: 32px;
+  margin-bottom: 6px;
 }
 
 .pet-name {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
+  margin-bottom: 2px;
 }
 
 .pet-level {
   font-size: 11px;
-  color: var(--text-muted);
-}
-
-.pet-bars {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.pet-bar-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.bar-label {
-  font-size: 9px;
-  color: var(--text-muted);
-  width: 12px;
-}
-
-.pet-bar {
-  flex: 1;
-  height: 4px;
-  background: rgba(0,0,0,0.06);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.pet-bar-fill {
-  height: 100%;
-  border-radius: 2px;
+  color: var(--primary);
 }
 
 .pet-add {
-  min-width: 80px;
+  min-width: 70px;
+  background: var(--bg-gray);
   border-radius: var(--radius-lg);
-  padding: 12px;
-  background: var(--bg-muted);
-  border: 1px dashed var(--border);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
 .add-icon {
-  font-size: 20px;
+  font-size: 24px;
   color: var(--text-muted);
-}
-
-.add-label {
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 4px;
 }
 
 /* Task Card */
@@ -678,23 +553,10 @@ onMounted(() => {
   color: var(--primary);
 }
 
-.progress {
-  height: 6px;
-  background: var(--bg-muted);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 14px;
-}
-
-.progress-bar {
-  height: 100%;
-  background: var(--primary);
-  border-radius: 3px;
-}
-
 .task-list {
   display: flex;
   gap: 8px;
+  margin-top: 12px;
 }
 
 .task-item {
@@ -703,12 +565,8 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 10px 4px;
-  background: var(--bg-muted);
+  background: var(--bg-gray);
   border-radius: var(--radius-md);
-}
-
-.task-item.done {
-  background: var(--primary-light);
 }
 
 .task-emoji {
@@ -717,17 +575,7 @@ onMounted(() => {
 }
 
 .task-name {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-secondary);
-  margin-bottom: 2px;
-}
-
-.task-status {
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.bottom-fake {
-  height: 20px;
 }
 </style>

@@ -111,55 +111,63 @@ const likePost = (post: any) => {
 <style scoped>
 .community-container {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
+  padding-bottom: 40px;
 }
 
+/* 头部 */
 .community-header {
-  background: #fff;
-  padding: 20px;
+  background: var(--primary);
+  padding: 50px 16px 20px;
   text-align: center;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .title {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
-}
-
-.category-tabs {
-  display: flex;
-  background: #fff;
-  padding: 12px 16px;
-  gap: 12px;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.tab {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.tab.active {
-  background: #22c55e;
   color: #fff;
 }
 
-.posts-list {
+/* 分类 */
+.category-tabs {
+  display: flex;
+  background: var(--bg-card);
   padding: 12px 16px;
-  height: calc(100vh - 120px);
+  gap: 8px;
+  margin: 12px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow-x: auto;
 }
 
+.tab {
+  padding: 8px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* 列表 */
+.posts-list {
+  padding: 0 16px;
+}
+
+/* 发帖框 */
 .create-post {
-  background: #fff;
-  border-radius: 10px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
   padding: 12px;
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-  border: 1px solid #e2e8f0;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
 }
 
 .avatar {
@@ -168,16 +176,17 @@ const likePost = (post: any) => {
 }
 
 .input-hint {
-  color: #94a3b8;
+  color: var(--text-muted);
   font-size: 14px;
 }
 
+/* 帖子卡片 */
 .post-card {
-  background: #fff;
-  border-radius: 10px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
   padding: 14px;
   margin-bottom: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .post-header {
@@ -199,12 +208,12 @@ const likePost = (post: any) => {
 .username {
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 .post-time {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .post-content {
@@ -213,7 +222,7 @@ const likePost = (post: any) => {
 
 .post-text {
   font-size: 14px;
-  color: #334155;
+  color: var(--text-primary);
   line-height: 1.5;
 }
 
@@ -221,7 +230,7 @@ const likePost = (post: any) => {
   display: flex;
   gap: 20px;
   padding-top: 10px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--border-light);
 }
 
 .action-item {
@@ -231,7 +240,7 @@ const likePost = (post: any) => {
 }
 
 .action-count {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 12px;
+  color: var(--text-muted);
 }
 </style>

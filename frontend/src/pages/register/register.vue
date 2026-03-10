@@ -119,33 +119,33 @@ const goToLogin = () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: #f8fafc;
-  padding: 48px 20px 32px;
+  background: var(--bg-page);
+  padding: 48px 20px 24px;
 }
 
 .register-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   display: block;
   margin-bottom: 4px;
 }
 
 .subtitle {
   font-size: 14px;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .form-container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  border: 1px solid var(--border);
 }
 
 .form-group {
@@ -155,28 +155,28 @@ const goToLogin = () => {
 .input {
   width: 100%;
   padding: 12px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
   font-size: 14px;
-  background: #fff;
+  background: var(--bg-card);
   box-sizing: border-box;
 }
 
 .input:focus {
   outline: none;
-  border-color: #22c55e;
+  border-color: var(--primary);
 }
 
 .btn-register {
   width: 100%;
-  padding: 12px;
-  background: #22c55e;
+  padding: 14px;
+  background: var(--primary);
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
   font-weight: 500;
-  margin-top: 8px;
+  margin-top: 10px;
   cursor: pointer;
 }
 
@@ -186,23 +186,24 @@ const goToLogin = () => {
 
 .btn-login-link {
   width: 100%;
-  padding: 12px;
-  background: transparent;
-  color: #22c55e;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 13px;
-  margin-top: 8px;
+  padding: 14px;
+  background: var(--bg-gray);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 10px;
   cursor: pointer;
 }
 
 .error-message {
-  color: #ef4444;
+  color: var(--error);
   font-size: 13px;
-  margin-top: 16px;
+  margin-top: 12px;
   text-align: center;
-  background: #fef2f2;
+  background: #FEF2F2;
   padding: 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 </style>

@@ -136,14 +136,14 @@ const logout = () => {
 <style scoped>
 .profile-page {
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--bg-page);
   padding-bottom: 32px;
 }
 
+/* 头部 */
 .profile-header {
-  background: #fff;
-  padding: 48px 20px 20px;
-  border-bottom: 1px solid #e2e8f0;
+  background: var(--primary);
+  padding: 50px 16px 20px;
 }
 
 .user-box {
@@ -155,8 +155,8 @@ const logout = () => {
 .avatar {
   width: 56px;
   height: 56px;
-  background: #f1f5f9;
-  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,23 +171,24 @@ const logout = () => {
 .nickname {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
+  color: #fff;
 }
 
 .user-id {
-  font-size: 13px;
-  color: #64748b;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
   margin-top: 2px;
 }
 
+/* 资产 */
 .assets-card {
-  background: #fff;
-  margin: 16px;
-  border-radius: 12px;
-  padding: 20px;
+  background: var(--bg-card);
+  margin: 12px 16px;
+  border-radius: var(--radius-lg);
+  padding: 16px;
   display: flex;
   justify-content: space-around;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .asset-cell {
@@ -199,28 +200,29 @@ const logout = () => {
 .asset-num {
   font-size: 20px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 .asset-label {
   font-size: 12px;
-  color: #64748b;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
 .asset-divider {
   width: 1px;
-  background: #e2e8f0;
+  background: var(--border);
 }
 
+/* 统计 */
 .stats-card {
-  background: #fff;
-  margin: 0 16px 16px;
-  border-radius: 12px;
-  padding: 16px;
+  background: var(--bg-card);
+  margin: 0 16px 12px;
+  border-radius: var(--radius-lg);
+  padding: 14px;
   display: flex;
   justify-content: space-around;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .stat-cell {
@@ -232,28 +234,29 @@ const logout = () => {
 .stat-num {
   font-size: 18px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--primary);
 }
 
 .stat-label {
-  font-size: 12px;
-  color: #64748b;
+  font-size: 11px;
+  color: var(--text-muted);
   margin-top: 4px;
 }
 
+/* 菜单 */
 .menu-card {
-  background: #fff;
+  background: var(--bg-card);
   margin: 0 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
 }
 
 .menu-cell {
   display: flex;
   align-items: center;
-  padding: 14px 16px;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 14px;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .menu-cell:last-child {
@@ -267,23 +270,26 @@ const logout = () => {
 
 .menu-text {
   flex: 1;
-  font-size: 15px;
-  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .menu-arrow {
-  color: #cbd5e1;
+  color: var(--text-muted);
   font-size: 18px;
 }
 
+/* 退出 */
 .logout-btn {
-  background: #fff;
-  margin: 20px 16px 0;
+  background: var(--bg-card);
+  margin: 16px;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   text-align: center;
   font-size: 14px;
-  color: #ef4444;
-  border: 1px solid #e2e8f0;
+  font-weight: 500;
+  color: var(--error);
+  border: 1px solid var(--error);
 }
 </style>
