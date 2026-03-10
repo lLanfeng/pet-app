@@ -26,17 +26,33 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
 #app {
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
   min-height: 100vh;
   background: var(--bg-page);
 }
 
+/* 桌面端限制宽度 */
+@media (min-width: 481px) {
+  html, body {
+    background: #e8e8e8;
+  }
+  #app {
+    max-width: 480px;
+    margin: 0 auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  }
+}
+
 body {
   font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #e8e8e8;
+  background: var(--bg-page);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;

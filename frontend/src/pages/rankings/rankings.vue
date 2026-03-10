@@ -1,65 +1,65 @@
 <template>
-  <view class="rankings-container">
+  <div class="rankings-container">
     <!-- 排行榜头部 -->
-    <view class="rankings-header">
-      <text class="rankings-title">宠物排行榜</text>
-    </view>
+    <div class="rankings-header">
+      <span class="rankings-title">宠物排行榜</span>
+    </div>
 
     <!-- 排行榜类型切换 -->
-    <view class="ranking-types">
-      <view
+    <div class="ranking-types">
+      <div
         v-for="type in rankingTypes"
         :key="type.id"
         class="ranking-type"
         :class="{ active: activeType === type.id }"
         @click="switchType(type.id)"
       >
-        <text class="type-icon">{{ type.icon }}</text>
-        <text class="type-name">{{ type.name }}</text>
-      </view>
-    </view>
+        <span class="type-icon">{{ type.icon }}</span>
+        <span class="type-name">{{ type.name }}</span>
+      </div>
+    </div>
 
     <!-- 我的排名 -->
-    <view class="my-ranking">
-      <view class="my-rank-card">
-        <view class="rank-badge">
-          <text class="rank-number">#{{ myRank }}</text>
-        </view>
-        <view class="my-info">
-          <text class="my-name">我的排名</text>
-          <text class="my-score">{{ myScore }} 分</text>
-        </view>
-      </view>
-    </view>
+    <div class="my-ranking">
+      <div class="my-rank-card">
+        <div class="rank-badge">
+          <span class="rank-number">#{{ myRank }}</span>
+        </div>
+        <div class="my-info">
+          <span class="my-name">我的排名</span>
+          <span class="my-score">{{ myScore }} 分</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 排行榜列表 -->
-    <scroll-view class="rankings-list" scroll-y="true">
-      <view
+    <div class="rankings-list">
+      <div
         v-for="(item, index) in rankings"
         :key="item.id"
         class="ranking-item"
         :class="{ 'top-three': index < 3 }"
       >
-        <view class="rank-position">
-          <text v-if="index < 3" class="medal">{{ ['🥇', '🥈', '🥉'][index] }}</text>
-          <text v-else class="rank-num">{{ index + 1 }}</text>
-        </view>
+        <div class="rank-position">
+          <span v-if="index < 3" class="medal">{{ ['🥇', '🥈', '🥉'][index] }}</span>
+          <span v-else class="rank-num">{{ index + 1 }}</span>
+        </div>
 
-        <view class="pet-info">
-          <text class="pet-emoji">{{ item.emoji }}</text>
-          <view class="pet-details">
-            <text class="pet-name">{{ item.name }}</text>
-            <text class="pet-owner">{{ item.owner }}</text>
-          </view>
-        </view>
+        <div class="pet-info">
+          <span class="pet-emoji">{{ item.emoji }}</span>
+          <div class="pet-details">
+            <span class="pet-name">{{ item.name }}</span>
+            <span class="pet-owner">{{ item.owner }}</span>
+          </div>
+        </div>
 
-        <view class="pet-stats">
-          <text class="pet-level">Lv.{{ item.level }}</text>
-          <text class="pet-score">{{ item.score }}</text>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
+        <div class="pet-stats">
+          <span class="pet-level">Lv.{{ item.level }}</span>
+          <span class="pet-score">{{ item.score }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -101,8 +101,8 @@ const switchType = (typeId: string) => {
 
 /* 头部 */
 .rankings-header {
-  background: var(--primary);
-  padding: 50px 16px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 50px 16px 24px;
   text-align: center;
 }
 
@@ -115,26 +115,33 @@ const switchType = (typeId: string) => {
 /* 类型切换 */
 .ranking-types {
   display: flex;
-  padding: 12px 16px;
-  gap: 8px;
+  padding: 16px;
+  gap: 10px;
   overflow-x: auto;
-  background: var(--bg-card);
-  margin: 12px 16px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+  background: var(--bg-page);
 }
 
 .ranking-type {
   display: flex;
   align-items: center;
-  padding: 8px 14px;
-  background: var(--bg-gray);
+  padding: 10px 20px;
+  background: var(--bg-card);
   border-radius: var(--radius-full);
   white-space: nowrap;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ranking-type:hover {
+  transform: translateY(-2px);
 }
 
 .ranking-type.active {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  border-color: transparent;
+  transform: scale(1.05);
 }
 
 .type-icon {
@@ -154,28 +161,29 @@ const switchType = (typeId: string) => {
 
 .my-rank-card {
   background: var(--bg-card);
-  padding: 14px;
+  padding: 16px;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
 .rank-badge {
-  width: 44px;
-  height: 44px;
-  background: #FEF3C7;
-  border-radius: var(--radius-md);
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 12px;
+  margin-right: 14px;
 }
 
 .rank-number {
   color: #D97706;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .my-info {
@@ -183,7 +191,7 @@ const switchType = (typeId: string) => {
 }
 
 .my-name {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
   display: block;
@@ -191,9 +199,9 @@ const switchType = (typeId: string) => {
 }
 
 .my-score {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--accent);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* 列表 */
@@ -206,14 +214,21 @@ const switchType = (typeId: string) => {
   align-items: center;
   background: var(--bg-card);
   margin-bottom: 10px;
-  padding: 12px;
+  padding: 14px;
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.ranking-item:active {
+  transform: scale(0.98);
 }
 
 .ranking-item.top-three {
-  background: #FEFCE8;
+  background: linear-gradient(135deg, #FEFCE8, #FEF9C3);
   border-color: #FCD34D;
+  box-shadow: 0 4px 16px rgba(252, 211, 77, 0.3);
 }
 
 .rank-position {

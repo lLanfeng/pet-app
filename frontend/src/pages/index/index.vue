@@ -22,27 +22,26 @@
       </div>
     </div>
 
-    <!-- 横幅 -->
+    <!-- 横幅轮播 -->
     <div class="banner-wrap">
-      <swiper
-        class="banner"
-        :indicator-dots="true"
-        :autoplay="true"
-        :interval="4000"
-        :duration="600"
-        :circular="true"
-        indicator-color="rgba(255,255,255,0.5)"
-        indicator-active-color="#fff"
-      >
-        <swiper-item v-for="item in banners" :key="item.id">
-          <div class="banner-content" @click="onBannerClick(item)">
-            <img :src="item.image" mode="aspectFill" class="banner-img" />
-            <div class="banner-info">
-              <span class="banner-title">{{ item.title }}</span>
+      <div class="swiper" ref="swiperRef">
+        <div class="swiper-wrapper">
+          <div
+            v-for="item in banners"
+            :key="item.id"
+            class="swiper-slide"
+            @click="onBannerClick(item)"
+          >
+            <div class="banner-content">
+              <img :src="item.image" class="banner-img" />
+              <div class="banner-info">
+                <span class="banner-title">{{ item.title }}</span>
+              </div>
             </div>
           </div>
-        </swiper-item>
-      </swiper>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
     </div>
 
     <!-- 快捷入口 -->
@@ -114,13 +113,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { petAPI, tasksAPI, userAPI } from '@/services/api';
+import Swiper from 'swiper';
+import { Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 const router = useRouter();
 const authStore = useAuthStore();
+const swiperRef = ref<HTMLElement | null>(null);
+let swiperInstance: Swiper | null = null;
 
 const userNickname = ref('主人');
 const userLevel = ref(1);
@@ -211,6 +216,26 @@ const openGacha = () => {
 onMounted(() => {
   authStore.restoreAuth();
 
+  // Initialize Swiper
+  if (swiperRef.value) {
+    swiperInstance = new Swiper(swiperRef.value, {
+      modules: [Pagination, Autoplay],
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      effect: 'fade',
+      fadeEffect: {
+        crossFade: true,
+      },
+    });
+  }
+
   const loadDashboard = async () => {
     const userId = authStore.userId || 1;
 
@@ -260,6 +285,12 @@ onMounted(() => {
 
   loadDashboard();
 });
+
+onUnmounted(() => {
+  if (swiperInstance) {
+    swiperInstance.destroy();
+  }
+});
 </script>
 
 <style scoped>
@@ -271,7 +302,7 @@ onMounted(() => {
 
 /* Header */
 .header {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   padding: 50px 16px 16px;
   display: flex;
   justify-content: space-between;
@@ -293,6 +324,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   font-size: 24px;
+  cursor: pointer;
 }
 
 .user-info {
@@ -327,6 +359,7 @@ onMounted(() => {
   font-size: 13px;
   font-weight: 600;
   color: #fff;
+  cursor: pointer;
 }
 
 .sign-pill {
@@ -340,6 +373,7 @@ onMounted(() => {
   font-size: 14px;
   font-weight: 700;
   color: var(--primary);
+  cursor: pointer;
 }
 
 .sign-pill.signed {
@@ -352,7 +386,7 @@ onMounted(() => {
   padding: 12px 16px;
 }
 
-.banner {
+.banner-wrap .swiper {
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -360,12 +394,12 @@ onMounted(() => {
 .banner-content {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 140px;
 }
 
 .banner-img {
   width: 100%;
-  height: 140px;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -382,6 +416,7 @@ onMounted(() => {
   font-size: 16px;
   font-weight: 600;
   color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 /* Quick Grid */
@@ -401,6 +436,7 @@ onMounted(() => {
   align-items: center;
   padding: 14px 8px;
   background: var(--bg-card);
+  cursor: pointer;
 }
 
 .quick-icon {
@@ -422,6 +458,8 @@ onMounted(() => {
   margin: 16px;
   padding: 14px;
   border-radius: var(--radius-lg);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
 .gacha-left {
@@ -495,6 +533,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   border: 1px solid var(--border);
+  cursor: pointer;
 }
 
 .pet-emoji {
@@ -521,6 +560,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .add-icon {

@@ -187,12 +187,31 @@ const init = async () => {
   console.log('✅ MySQL database tables initialized');
 };
 
+// 创建默认用户（如果不存在）
+const createDefaultUser = async () => {
+  const p = getPool();
+  try {
+    const [users] = await p.execute('SELECT id FROM users LIMIT 1');
+    if (users.length === 0) {
+      // 创建默认用户
+      await p.execute(
+        'INSERT INTO users (phone, nickname, password_hash, avatar, coins, diamonds, level) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        ['demo', '萌新主人', 'demo', '👤', 1000, 10, 1]
+      );
+      console.log('✅ Default user created');
+    }
+  } catch (err) {
+    console.error('Error creating default user:', err.message);
+  }
+};
+
 // Test connection and initialize
 getPool().getConnection()
   .then(async (connection) => {
     console.log('✅ Connected to MySQL database');
     connection.release();
     await init();
+    await createDefaultUser();
   })
   .catch(err => {
     console.error('❌ MySQL connection error:', err.message);

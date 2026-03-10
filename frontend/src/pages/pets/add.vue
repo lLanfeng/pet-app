@@ -1,20 +1,20 @@
 <template>
-  <view class="add-pet-container">
-    <view class="form-section">
-      <view class="form-group">
-        <text class="label">宠物名称</text>
+  <div class="add-pet-container">
+    <div class="form-section">
+      <div class="form-group">
+        <span class="label">宠物名称</span>
         <input 
           v-model="petName"
           type="text"
           placeholder="给你的宠物起个名字"
           class="input"
         />
-      </view>
+      </div>
 
-      <view class="form-group">
-        <text class="label">宠物类型</text>
-        <view class="type-selector">
-          <view 
+      <div class="form-group">
+        <span class="label">宠物类型</span>
+        <div class="type-selector">
+          <div 
             v-for="type in petTypes"
             :key="type.id"
             class="type-option"
@@ -22,9 +22,9 @@
             @click="petType = type.id"
           >
             {{ type.emoji }} {{ type.name }}
-          </view>
-        </view>
-      </view>
+          </div>
+        </div>
+      </div>
 
       <button 
         @click="onSubmit"
@@ -33,12 +33,12 @@
       >
         {{ loading ? '创建中...' : '创建宠物' }}
       </button>
-    </view>
+    </div>
 
-    <view v-if="error" class="error-message">
+    <div v-if="error" class="error-message">
       {{ error }}
-    </view>
-  </view>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>

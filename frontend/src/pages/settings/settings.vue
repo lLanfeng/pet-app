@@ -1,76 +1,76 @@
 <template>
-  <view class="settings-container">
+  <div class="settings-container">
     <!-- 设置头部 -->
-    <view class="settings-header">
-      <text class="settings-title">设置</text>
-    </view>
+    <div class="settings-header">
+      <span class="settings-title">设置</span>
+    </div>
 
     <!-- 设置选项列表 -->
     <scroll-view class="settings-list" scroll-y="true">
       <!-- 通知设置 -->
-      <view class="settings-section">
-        <text class="section-title">通知设置</text>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">推送通知</text>
-          </view>
+      <div class="settings-section">
+        <span class="section-title">通知设置</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">推送通知</span>
+          </div>
           <switch :checked="settings.notifications" @change="updateSetting('notifications', ($event as any).detail.value)" />
-        </view>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">喂食提醒</text>
-          </view>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">喂食提醒</span>
+          </div>
           <switch :checked="settings.feedingReminders" @change="updateSetting('feedingReminders', ($event as any).detail.value)" />
-        </view>
-      </view>
+        </div>
+      </div>
 
       <!-- 声音设置 -->
-      <view class="settings-section">
-        <text class="section-title">声音设置</text>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">背景音乐</text>
-          </view>
+      <div class="settings-section">
+        <span class="section-title">声音设置</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">背景音乐</span>
+          </div>
           <switch :checked="settings.backgroundMusic" @change="updateSetting('backgroundMusic', ($event as any).detail.value)" />
-        </view>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">音效</text>
-          </view>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">音效</span>
+          </div>
           <switch :checked="settings.soundEffects" @change="updateSetting('soundEffects', ($event as any).detail.value)" />
-        </view>
-      </view>
+        </div>
+      </div>
 
       <!-- 显示设置 -->
-      <view class="settings-section">
-        <text class="section-title">显示设置</text>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">深色模式</text>
-          </view>
+      <div class="settings-section">
+        <span class="section-title">显示设置</span>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">深色模式</span>
+          </div>
           <switch :checked="settings.darkMode" @change="updateSetting('darkMode', ($event as any).detail.value)" />
-        </view>
-        <view class="setting-item">
-          <view class="setting-info">
-            <text class="setting-name">动画效果</text>
-          </view>
+        </div>
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-name">动画效果</span>
+          </div>
           <switch :checked="settings.animations" @change="updateSetting('animations', ($event as any).detail.value)" />
-        </view>
-      </view>
+        </div>
+      </div>
 
       <!-- 关于 -->
-      <view class="settings-section">
-        <text class="section-title">关于</text>
-        <view class="setting-item" @click="showAbout">
-          <view class="setting-info">
-            <text class="setting-name">版本信息</text>
-            <text class="setting-desc">v1.0.0</text>
-          </view>
-          <text class="arrow">›</text>
-        </view>
-      </view>
+      <div class="settings-section">
+        <span class="section-title">关于</span>
+        <div class="setting-item" @click="showAbout">
+          <div class="setting-info">
+            <span class="setting-name">版本信息</span>
+            <span class="setting-desc">v1.0.0</span>
+          </div>
+          <span class="arrow">›</span>
+        </div>
+      </div>
     </scroll-view>
-  </view>
+  </div>
 </template>
 
 <script setup lang="ts">

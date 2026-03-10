@@ -1,52 +1,52 @@
 <template>
-  <view class="pets-container">
+  <div class="pets-container">
     <!-- 头部 -->
-    <view class="header">
-      <text class="title">我的宠物</text>
+    <div class="header">
+      <span class="title">我的宠物</span>
       <button class="btn-add" @click="goToAddPet">+ 添加</button>
-    </view>
+    </div>
 
     <!-- 宠物列表 -->
-    <view v-if="pets.length === 0" class="empty-state">
-      <text class="empty-icon">🐾</text>
-      <text class="empty-title">还没有宠物</text>
-      <text class="empty-desc">快来领养你的第一只宠物吧！</text>
+    <div v-if="pets.length === 0" class="empty-state">
+      <span class="empty-icon">🐾</span>
+      <span class="empty-title">还没有宠物</span>
+      <span class="empty-desc">快来领养你的第一只宠物吧！</span>
       <button class="btn-create" @click="goToAddPet">领养宠物</button>
-    </view>
+    </div>
 
-    <view v-else class="pets-grid">
-      <view 
+    <div v-else class="pets-grid">
+      <div 
         v-for="pet in pets"
         :key="pet.id"
         class="pet-card"
         :style="{ background: getPetColor(pet.type) }"
         @click="goPetDetail(pet.id)"
       >
-        <text class="pet-avatar">{{ getPetEmoji(pet.type) }}</text>
-        <view class="pet-info">
-          <text class="pet-name">{{ pet.name }}</text>
-          <text class="pet-type">{{ pet.type }}</text>
-        </view>
-        <view class="pet-level">
-          <text class="level-badge">Lv.{{ pet.level }}</text>
-        </view>
-        <view class="pet-stats">
-          <view class="stat-row">
-            <text class="stat-label">饱食</text>
-            <view class="stat-bar">
-              <view class="stat-fill" :style="{ width: pet.hunger + '%', background: '#22c55e' }"></view>
-            </view>
-          </view>
-          <view class="stat-row">
-            <text class="stat-label">快乐</text>
-            <view class="stat-bar">
-              <view class="stat-fill" :style="{ width: pet.happiness + '%', background: '#f59e0b' }"></view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-  </view>
+        <span class="pet-avatar">{{ getPetEmoji(pet.type) }}</span>
+        <div class="pet-info">
+          <span class="pet-name">{{ pet.name }}</span>
+          <span class="pet-type">{{ pet.type }}</span>
+        </div>
+        <div class="pet-level">
+          <span class="level-badge">Lv.{{ pet.level }}</span>
+        </div>
+        <div class="pet-stats">
+          <div class="stat-row">
+            <span class="stat-label">饱食</span>
+            <div class="stat-bar">
+              <div class="stat-fill" :style="{ width: pet.hunger + '%', background: '#22c55e' }"></div>
+            </div>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">快乐</span>
+            <div class="stat-bar">
+              <div class="stat-fill" :style="{ width: pet.happiness + '%', background: '#f59e0b' }"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

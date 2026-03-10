@@ -1,96 +1,96 @@
 <template>
-  <view class="detail-page">
+  <div class="detail-page">
     <!-- 头部 -->
-    <view class="detail-header">
-      <text class="pet-avatar">{{ petEmoji }}</text>
-      <view class="pet-info">
-        <text class="pet-name">{{ petName }}</text>
-        <view class="pet-tags">
-          <text class="pet-tag">{{ petType }}</text>
-          <text class="pet-tag">Lv.{{ petLevel }}</text>
-        </view>
-      </view>
-    </view>
+    <div class="detail-header">
+      <span class="pet-avatar">{{ petEmoji }}</span>
+      <div class="pet-info">
+        <span class="pet-name">{{ petName }}</span>
+        <div class="pet-tags">
+          <span class="pet-tag">{{ petType }}</span>
+          <span class="pet-tag">Lv.{{ petLevel }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 经验 -->
-    <view class="detail-card">
-      <view class="exp-row">
-        <text class="exp-label">经验值</text>
-        <text class="exp-value">{{ experience }}/{{ expNeed }}</text>
-      </view>
-      <view class="exp-bar">
-        <view class="exp-fill" :style="{width: expPercent + '%'}"></view>
-      </view>
-    </view>
+    <div class="detail-card">
+      <div class="exp-row">
+        <span class="exp-label">经验值</span>
+        <span class="exp-value">{{ experience }}/{{ expNeed }}</span>
+      </div>
+      <div class="exp-bar">
+        <div class="exp-fill" :style="{width: expPercent + '%'}"></div>
+      </div>
+    </div>
 
     <!-- 属性 -->
-    <view class="detail-card">
-      <view class="stat-item">
-        <text class="stat-icon">🍖</text>
-        <text class="stat-name">饱食</text>
-        <view class="stat-bar">
-          <view class="stat-fill" :style="{width: hunger + '%', background: '#10B981'}"></view>
-        </view>
-        <text class="stat-num">{{ hunger }}%</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-icon">😊</text>
-        <text class="stat-name">快乐</text>
-        <view class="stat-bar">
-          <view class="stat-fill" :style="{width: happiness + '%', background: '#F59E0B'}"></view>
-        </view>
-        <text class="stat-num">{{ happiness }}%</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-icon">⚡</text>
-        <text class="stat-name">活力</text>
-        <view class="stat-bar">
-          <view class="stat-fill" :style="{width: energy + '%', background: '#3B82F6'}"></view>
-        </view>
-        <text class="stat-num">{{ energy }}%</text>
-      </view>
-    </view>
+    <div class="detail-card">
+      <div class="stat-item">
+        <span class="stat-icon">🍖</span>
+        <span class="stat-name">饱食</span>
+        <div class="stat-bar">
+          <div class="stat-fill" :style="{width: hunger + '%', background: '#10B981'}"></div>
+        </div>
+        <span class="stat-num">{{ hunger }}%</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">😊</span>
+        <span class="stat-name">快乐</span>
+        <div class="stat-bar">
+          <div class="stat-fill" :style="{width: happiness + '%', background: '#F59E0B'}"></div>
+        </div>
+        <span class="stat-num">{{ happiness }}%</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon">⚡</span>
+        <span class="stat-name">活力</span>
+        <div class="stat-bar">
+          <div class="stat-fill" :style="{width: energy + '%', background: '#3B82F6'}"></div>
+        </div>
+        <span class="stat-num">{{ energy }}%</span>
+      </div>
+    </div>
 
     <!-- 互动 -->
-    <view class="detail-card">
-      <text class="card-title">互动</text>
-      <view class="action-grid">
-        <view class="action-btn" @click="action('feed')">
-          <text class="action-icon">🍖</text>
-          <text class="action-name">喂食</text>
-        </view>
-        <view class="action-btn" @click="action('play')">
-          <text class="action-icon">🎾</text>
-          <text class="action-name">玩耍</text>
-        </view>
-        <view class="action-btn" @click="action('train')">
-          <text class="action-icon">📚</text>
-          <text class="action-name">训练</text>
-        </view>
-        <view class="action-btn" @click="action('clean')">
-          <text class="action-icon">🛁</text>
-          <text class="action-name">清洁</text>
-        </view>
-      </view>
-    </view>
+    <div class="detail-card">
+      <span class="card-title">互动</span>
+      <div class="action-grid">
+        <div class="action-btn" @click="action('feed')">
+          <span class="action-icon">🍖</span>
+          <span class="action-name">喂食</span>
+        </div>
+        <div class="action-btn" @click="action('play')">
+          <span class="action-icon">🎾</span>
+          <span class="action-name">玩耍</span>
+        </div>
+        <div class="action-btn" @click="action('train')">
+          <span class="action-icon">📚</span>
+          <span class="action-name">训练</span>
+        </div>
+        <div class="action-btn" @click="action('clean')">
+          <span class="action-icon">🛁</span>
+          <span class="action-name">清洁</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 记录 -->
-    <view class="detail-card">
-      <text class="card-title">记录</text>
-      <view class="record-list">
-        <view class="record-item" v-for="(r, i) in records" :key="i">
-          <text class="record-icon">{{ r.icon }}</text>
-          <text class="record-text">{{ r.text }}</text>
-          <text class="record-time">{{ r.time }}</text>
-        </view>
-      </view>
-    </view>
+    <div class="detail-card">
+      <span class="card-title">记录</span>
+      <div class="record-list">
+        <div class="record-item" v-for="(r, i) in records" :key="i">
+          <span class="record-icon">{{ r.icon }}</span>
+          <span class="record-text">{{ r.text }}</span>
+          <span class="record-time">{{ r.time }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 删除 -->
-    <view class="delete-btn" @click="remove">
+    <div class="delete-btn" @click="remove">
       删除宠物
-    </view>
-  </view>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

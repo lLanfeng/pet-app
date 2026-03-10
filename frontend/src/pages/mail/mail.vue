@@ -1,50 +1,51 @@
 <template>
-  <view class="mail-container">
+  <div class="mail-container">
     <!-- 头部 -->
-    <view class="mail-header">
-      <text class="title">消息中心</text>
-    </view>
+    <div class="mail-header">
+      <span class="title">消息中心</span>
+    </div>
 
     <!-- 标签 -->
-    <view class="mail-tabs">
-      <view 
-        v-for="tab in tabs" 
+    <div class="mail-tabs">
+      <div
+        v-for="tab in tabs"
         :key="tab.id"
         class="tab"
         :class="{ active: activeTab === tab.id }"
         @click="switchTab(tab.id)"
       >
-        <text class="tab-name">{{ tab.name }}</text>
-      </view>
-    </view>
+        <span class="tab-name">{{ tab.name }}</span>
+      </div>
+    </div>
 
     <!-- 消息列表 -->
-    <scroll-view class="mail-list" scroll-y="true">
-      <view 
-        v-for="mail in currentMails" 
+    <div class="mail-list">
+      <div
+        v-for="mail in currentMails"
         :key="mail.id"
         class="mail-item"
         :class="{ unread: !mail.read }"
       >
-        <view class="mail-icon">
+        <div class="mail-icon">
           {{ mail.icon }}
-        </view>
-        <view class="mail-content">
-          <view class="mail-header-info">
-            <text class="mail-title">{{ mail.title }}</text>
-            <text class="mail-time">{{ mail.time }}</text>
-          </view>
-          <text class="mail-desc">{{ mail.content }}</text>
-        </view>
-        <view class="unread-dot" v-if="!mail.read"></view>
-      </view>
+        </div>
+        <div class="mail-content">
+          <div class="mail-header-info">
+            <span class="mail-title">{{ mail.title }}</span>
+            <span class="mail-time">{{ mail.time }}</span>
+          </div>
+          <span class="mail-desc">{{ mail.content }}</span>
+        </div>
+        <div class="unread-dot" v-if="!mail.read"></div>
+      </div>
 
       <!-- 空状态 -->
-      <view class="empty-state" v-if="currentMails.length === 0">
-        <text class="empty-text">暂无消息</text>
-      </view>
-    </scroll-view>
-  </view>
+      <div class="empty-state" v-if="currentMails.length === 0">
+        <span class="empty-emoji">📭</span>
+        <span class="empty-text">暂无消息</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -79,13 +80,13 @@ const switchTab = (id: string) => {
 .mail-container {
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: 40px;
+  padding-bottom: 80px;
 }
 
 /* 头部 */
 .mail-header {
-  background: var(--primary);
-  padding: 50px 16px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 50px 16px 24px;
   text-align: center;
 }
 
@@ -98,25 +99,35 @@ const switchTab = (id: string) => {
 /* 标签 */
 .mail-tabs {
   display: flex;
-  background: var(--bg-card);
-  padding: 12px 16px;
-  gap: 8px;
-  margin: 12px 16px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+  padding: 16px;
+  gap: 10px;
+  overflow-x: auto;
+  background: var(--bg-page);
 }
 
 .tab {
-  padding: 8px 14px;
+  padding: 10px 20px;
   border-radius: var(--radius-full);
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  transform: translateY(-2px);
 }
 
 .tab.active {
-  background: var(--primary);
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  border-color: transparent;
+  transform: scale(1.05);
 }
 
 /* 列表 */
@@ -128,36 +139,50 @@ const switchTab = (id: string) => {
   display: flex;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 12px;
+  padding: 14px;
   margin-bottom: 10px;
   position: relative;
   border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.mail-item:active {
+  transform: scale(0.98);
 }
 
 .mail-item.unread {
-  background: #F0FDF4;
+  background: linear-gradient(135deg, #F0FDF4, #DCFCE7);
   border-color: var(--success);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
 .mail-icon {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   background: var(--bg-gray);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  margin-right: 10px;
+  font-size: 22px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.mail-item.unread .mail-icon {
+  background: #BBF7D0;
 }
 
 .mail-content {
   flex: 1;
+  min-width: 0;
 }
 
 .mail-header-info {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 4px;
 }
 
@@ -175,16 +200,21 @@ const switchTab = (id: string) => {
 .mail-desc {
   font-size: 12px;
   color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .unread-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background: var(--error);
   border-radius: 50%;
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
 }
 
 /* 空状态 */
@@ -192,7 +222,12 @@ const switchTab = (id: string) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
+}
+
+.empty-emoji {
+  font-size: 56px;
+  margin-bottom: 16px;
 }
 
 .empty-text {

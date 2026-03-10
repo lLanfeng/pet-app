@@ -1,41 +1,41 @@
 <template>
-  <view class="achievements-container">
+  <div class="achievements-container">
     <!-- 头部 -->
-    <view class="achievements-header">
-      <text class="title">成就系统</text>
-      <text class="subtitle">已完成 {{ completedCount }}/{{ totalCount }} 个成就</text>
-    </view>
+    <div class="achievements-header">
+      <span class="title">成就系统</span>
+      <span class="subtitle">已完成 {{ completedCount }}/{{ totalCount }} 个成就</span>
+    </div>
 
     <!-- 成就列表 -->
     <scroll-view class="achievements-list" scroll-y="true">
-      <view
+      <div
         v-for="achievement in achievements"
         :key="achievement.id"
         class="achievement-card"
         :class="{ completed: achievement.completed }"
       >
-        <view class="achievement-icon">
+        <div class="achievement-icon">
           {{ achievement.completed ? achievement.icon : '🔒' }}
-        </view>
-        <view class="achievement-content">
-          <text class="achievement-name">{{ achievement.name }}</text>
-          <text class="achievement-desc">{{ achievement.description }}</text>
-          <view class="achievement-progress">
-            <view class="progress-bar">
-              <view class="progress-fill" :style="{ width: achievement.progress + '%' }"></view>
-            </view>
-            <text class="progress-text">{{ achievement.current }}/{{ achievement.target }}</text>
-          </view>
-        </view>
-        <view class="achievement-reward" v-if="achievement.completed && !achievement.claimed" @click="claimReward(achievement)">
-          <text class="reward-text">领取</text>
-        </view>
-        <view class="achievement-reward" v-else-if="achievement.claimed">
-          <text class="reward-text claimed">已领取</text>
-        </view>
-      </view>
+        </div>
+        <div class="achievement-content">
+          <span class="achievement-name">{{ achievement.name }}</span>
+          <span class="achievement-desc">{{ achievement.description }}</span>
+          <div class="achievement-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{ width: achievement.progress + '%' }"></div>
+            </div>
+            <span class="progress-text">{{ achievement.current }}/{{ achievement.target }}</span>
+          </div>
+        </div>
+        <div class="achievement-reward" v-if="achievement.completed && !achievement.claimed" @click="claimReward(achievement)">
+          <span class="reward-text">领取</span>
+        </div>
+        <div class="achievement-reward" v-else-if="achievement.claimed">
+          <span class="reward-text claimed">已领取</span>
+        </div>
+      </div>
     </scroll-view>
-  </view>
+  </div>
 </template>
 
 <script setup lang="ts">

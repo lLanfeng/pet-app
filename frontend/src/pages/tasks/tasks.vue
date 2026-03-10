@@ -1,44 +1,46 @@
 <template>
-  <view class="tasks-container">
+  <div class="tasks-container">
     <!-- 任务头部 -->
-    <view class="tasks-header">
-      <view class="header-content">
-        <text class="tasks-title">每日任务</text>
-        <text class="tasks-subtitle">完成任务获得奖励</text>
-        <view class="progress-bar">
-          <view class="progress-fill" :style="{ width: progressPercent + '%' }"></view>
-          <text class="progress-text">{{ completedTasks }}/{{ totalTasks }}</text>
-        </view>
-      </view>
-    </view>
+    <div class="tasks-header">
+      <div class="header-content">
+        <span class="tasks-title">每日任务</span>
+        <span class="tasks-subtitle">完成任务获得奖励</span>
+        <div class="progress-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+          </div>
+          <span class="progress-text">{{ completedTasks }}/{{ totalTasks }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- 任务列表 -->
-    <scroll-view class="tasks-list" scroll-y="true">
-      <view
+    <div class="tasks-list">
+      <div
         v-for="task in tasks"
         :key="task.id"
         class="task-card"
         :class="{ completed: task.completed }"
       >
-        <view class="task-icon">
-          <text class="icon-emoji">{{ task.emoji }}</text>
-        </view>
+        <div class="task-icon">
+          <span class="icon-emoji">{{ task.emoji }}</span>
+        </div>
 
-        <view class="task-content">
-          <text class="task-title">{{ task.title }}</text>
-          <view class="task-progress">
-            <view class="progress-bg">
-              <view class="progress-fill" :style="{ width: task.progressPercent + '%' }"></view>
-            </view>
-            <text class="progress-text">{{ task.current }}/{{ task.target }}</text>
-          </view>
-        </view>
+        <div class="task-content">
+          <span class="task-title">{{ task.title }}</span>
+          <div class="task-progress">
+            <div class="progress-bg">
+              <div class="progress-fill" :style="{ width: task.progressPercent + '%' }"></div>
+            </div>
+            <span class="progress-text">{{ task.current }}/{{ task.target }}</span>
+          </div>
+        </div>
 
-        <view class="task-reward">
-          <text class="reward-amount">💰 {{ task.reward?.coins || 0 }}</text>
-        </view>
+        <div class="task-reward">
+          <span class="reward-amount">💰 {{ task.reward?.coins || 0 }}</span>
+        </div>
 
-        <view class="task-action">
+        <div class="task-action">
           <button
             v-if="!task.completed"
             class="action-btn disabled"
@@ -60,16 +62,16 @@
           >
             已领取
           </button>
-        </view>
-      </view>
-    </scroll-view>
+        </div>
+      </div>
+    </div>
 
     <!-- 任务提示 -->
-    <view class="task-tips">
-      <text class="tips-title">💡 小贴士</text>
-      <text class="tips-content">每天完成任务可以获得金币和经验！</text>
-    </view>
-  </view>
+    <div class="task-tips">
+      <span class="tips-title">💡 小贴士</span>
+      <span class="tips-content">每天完成任务可以获得金币和经验！</span>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -118,13 +120,13 @@ onMounted(() => {
 .tasks-container {
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: 40px;
+  padding-bottom: 80px;
 }
 
 /* 头部 */
 .tasks-header {
-  background: var(--primary);
-  padding: 50px 16px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 50px 16px 24px;
 }
 
 .header-content {
@@ -132,7 +134,7 @@ onMounted(() => {
 }
 
 .tasks-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 600;
   color: #fff;
   display: block;
@@ -143,38 +145,40 @@ onMounted(() => {
   font-size: 13px;
   color: rgba(255, 255, 255, 0.85);
   display: block;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .progress-bar {
-  width: 100%;
-  height: 8px;
+  flex: 1;
+  height: 10px;
   background: rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-full);
-  position: relative;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #fff;
+  background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
   border-radius: var(--radius-full);
-  transition: width 0.3s;
+  transition: width 0.3s ease;
 }
 
 .progress-text {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  transform: translateY(-50%);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   color: #fff;
+  white-space: nowrap;
 }
 
 /* 列表 */
 .tasks-list {
-  padding: 12px 16px;
+  padding: 16px;
 }
 
 .task-card {
@@ -185,6 +189,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .task-card.completed {
@@ -200,6 +205,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .task-card.completed .task-icon {
@@ -212,6 +218,7 @@ onMounted(() => {
 
 .task-content {
   flex: 1;
+  min-width: 0;
 }
 
 .task-title {
@@ -237,18 +244,18 @@ onMounted(() => {
 }
 
 .task-progress .progress-fill {
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
 }
 
 .task-progress .progress-text {
-  position: static;
-  transform: none;
   font-size: 11px;
   color: var(--text-muted);
+  min-width: 36px;
 }
 
 .task-reward {
-  margin: 0 12px;
+  margin: 0 10px;
+  flex-shrink: 0;
 }
 
 .reward-amount {
@@ -258,15 +265,16 @@ onMounted(() => {
 }
 
 .task-action {
-  min-width: 64px;
+  flex-shrink: 0;
 }
 
 .action-btn {
-  padding: 8px 12px;
+  padding: 8px 14px;
   border-radius: var(--radius-md);
   font-size: 12px;
   font-weight: 500;
   border: none;
+  cursor: pointer;
 }
 
 .action-btn.disabled {
@@ -275,8 +283,12 @@ onMounted(() => {
 }
 
 .action-btn.claim {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: #fff;
+}
+
+.action-btn.claim:active {
+  opacity: 0.9;
 }
 
 .action-btn.claimed {
@@ -291,6 +303,7 @@ onMounted(() => {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .tips-title {

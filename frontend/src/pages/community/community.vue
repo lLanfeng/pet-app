@@ -1,72 +1,73 @@
 <template>
-  <view class="community-container">
+  <div class="community-container">
     <!-- 头部 -->
-    <view class="community-header">
-      <text class="title">宠物社区</text>
-    </view>
+    <div class="community-header">
+      <span class="title">宠物社区</span>
+    </div>
 
     <!-- 分类标签 -->
-    <view class="category-tabs">
-      <view 
-        v-for="tab in tabs" 
+    <div class="category-tabs">
+      <div
+        v-for="tab in tabs"
         :key="tab.id"
         class="tab"
         :class="{ active: activeTab === tab.id }"
+        :style="activeTab === tab.id ? { background: tab.color } : {}"
         @click="switchTab(tab.id)"
       >
-        <text class="tab-name">{{ tab.name }}</text>
-      </view>
-    </view>
+        <span class="tab-name">{{ tab.name }}</span>
+      </div>
+    </div>
 
     <!-- 帖子列表 -->
-    <scroll-view class="posts-list" scroll-y="true">
+    <div class="posts-list">
       <!-- 发布按钮 -->
-      <view class="create-post" @click="showCreatePost">
-        <text class="avatar">👤</text>
-        <text class="input-hint">分享你的萌宠日常...</text>
-      </view>
+      <div class="create-post" @click="showCreatePost">
+        <span class="avatar">👤</span>
+        <span class="input-hint">分享你的萌宠日常...</span>
+      </div>
 
       <!-- 帖子卡片 -->
-      <view 
-        v-for="post in posts" 
-        :key="post.id" 
+      <div
+        v-for="post in posts"
+        :key="post.id"
         class="post-card"
       >
-        <view class="post-header">
-          <text class="post-avatar">{{ post.avatar }}</text>
-          <view class="post-user">
-            <text class="username">{{ post.username }}</text>
-            <text class="post-time">{{ post.time }}</text>
-          </view>
-        </view>
+        <div class="post-header">
+          <span class="post-avatar">{{ post.avatar }}</span>
+          <div class="post-user">
+            <span class="username">{{ post.username }}</span>
+            <span class="post-time">{{ post.time }}</span>
+          </div>
+        </div>
 
-        <view class="post-content">
-          <text class="post-text">{{ post.content }}</text>
-        </view>
+        <div class="post-content">
+          <span class="post-text">{{ post.content }}</span>
+        </div>
 
         <!-- 互动 -->
-        <view class="post-actions">
-          <view class="action-item" @click="likePost(post)">
-            <text>{{ post.liked ? '❤️' : '🤍' }}</text>
-            <text class="action-count">{{ post.likes }}</text>
-          </view>
-          <view class="action-item">
-            <text>💬</text>
-            <text class="action-count">{{ post.comments }}</text>
-          </view>
-        </view>
-      </view>
-    </scroll-view>
-  </view>
+        <div class="post-actions">
+          <div class="action-item" @click="likePost(post)">
+            <span>{{ post.liked ? '❤️' : '🤍' }}</span>
+            <span class="action-count">{{ post.likes }}</span>
+          </div>
+          <div class="action-item">
+            <span>💬</span>
+            <span class="action-count">{{ post.comments }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 
 const tabs = [
-  { id: 'all', name: '全部' },
-  { id: 'follow', name: '关注' },
-  { id: 'hot', name: '热门' },
+  { id: 'all', name: '全部', color: '#FEF3C7' },
+  { id: 'follow', name: '关注', color: '#DBEAFE' },
+  { id: 'hot', name: '热门', color: '#FCE7F3' },
 ]
 
 const activeTab = ref('all')
@@ -112,13 +113,13 @@ const likePost = (post: any) => {
 .community-container {
   min-height: 100vh;
   background: var(--bg-page);
-  padding-bottom: 40px;
+  padding-bottom: 80px;
 }
 
 /* 头部 */
 .community-header {
-  background: var(--primary);
-  padding: 50px 16px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  padding: 50px 16px 24px;
   text-align: center;
 }
 
@@ -131,27 +132,35 @@ const likePost = (post: any) => {
 /* 分类 */
 .category-tabs {
   display: flex;
-  background: var(--bg-card);
-  padding: 12px 16px;
-  gap: 8px;
-  margin: 12px 16px;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+  padding: 16px;
+  gap: 10px;
   overflow-x: auto;
+  background: var(--bg-page);
 }
 
 .tab {
-  padding: 8px 14px;
+  padding: 10px 20px;
   border-radius: var(--radius-full);
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
   white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  transform: translateY(-2px);
 }
 
 .tab.active {
-  background: var(--primary);
-  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+  border-color: transparent;
+  transform: scale(1.05);
 }
 
 /* 列表 */
@@ -163,16 +172,23 @@ const likePost = (post: any) => {
 .create-post {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 12px;
+  padding: 14px;
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   border: 1px solid var(--border);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s;
+}
+
+.create-post:active {
+  transform: scale(0.98);
 }
 
 .avatar {
-  font-size: 28px;
-  margin-right: 10px;
+  font-size: 32px;
+  margin-right: 12px;
 }
 
 .input-hint {
@@ -184,9 +200,11 @@ const likePost = (post: any) => {
 .post-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
-  padding: 14px;
-  margin-bottom: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
   border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .post-header {
@@ -198,11 +216,13 @@ const likePost = (post: any) => {
 .post-avatar {
   font-size: 32px;
   margin-right: 10px;
+  flex-shrink: 0;
 }
 
 .post-user {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .username {
@@ -223,7 +243,9 @@ const likePost = (post: any) => {
 .post-text {
   font-size: 14px;
   color: var(--text-primary);
-  line-height: 1.5;
+  line-height: 1.6;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .post-actions {
@@ -237,6 +259,7 @@ const likePost = (post: any) => {
   display: flex;
   align-items: center;
   gap: 4px;
+  cursor: pointer;
 }
 
 .action-count {
